@@ -2,7 +2,6 @@ package com.dynamsoft.barcode;
 
 public interface EnumBarCode {
 	public long OneD = 0x1FFL;
-
 	public long CODE_39 = 0x1L;
 	public long CODE_128 = 0x2L;
 	public long CODE_93 = 0x4L;
