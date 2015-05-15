@@ -84,7 +84,7 @@ Barcode Reader 2.0 Trial
 A Simple Barcode Reader Application in C++
 ---------------------------------
   ```C++
-  #include <stdio.h>
+#include <stdio.h>
 #include "<relative path>/If_DBRP.h"
 #ifdef _WIN64
 #pragma comment(lib, "<relative path>/x64/DBRx64.lib")
