@@ -15,13 +15,12 @@ How to Run
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/python_lib-1024x460.png)
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/python_dependency-1024x465.png)
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/python_pyd-1024x459.png)
-2. build the project to generate **DynamsoftBarcodeReader.pyd**.
-3. copy generated DLL and DBR DLL to Java Barcode Reader Project.
-
-4. import the Java project into Eclipse.
-5. specify an image file path as argument, and then run the Java project.
-
-![image](http://www.codepool.biz/wp-content/uploads/2015/05/dbr_results1.png)
+2. Build the project to generate **DynamsoftBarcodeReader.pyd**.
+3. Run **DynamsoftBarcodeReader.py** which located under Release folder.
+```cmd
+> Python DynamsoftBarcodeReader.py
+```
+![image](http://www.codepool.biz/wp-content/uploads/2015/05/python_dbr_test.png)
 
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
