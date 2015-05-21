@@ -21,5 +21,10 @@ How to Run
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/dbr_args.png)
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/dbr_results1.png)
 
+Blog
+-----
+[How to Make Java Barcode Reader with Dynamsoft Barcode SDK][3]
+
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
+[3]:http://www.codepool.biz/barcode/how-to-make-java-barcode-reader-with-dynamsoft-barcode-sdk.html
