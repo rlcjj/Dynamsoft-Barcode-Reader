@@ -11,9 +11,9 @@
 
 
 #ifdef _WIN64
-#pragma comment(lib, "../../../Lib/DBRx64.lib")
+#pragma comment(lib, "DBRx64.lib")
 #else
-#pragma comment(lib, "../../../Lib/DBRx86.lib")
+#pragma comment(lib, "DBRx86.lib")
 #endif
 
 
