@@ -22,5 +22,10 @@ How to Run
 ```
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/python_dbr_test.png)
 
+Blog
+-----------
+[Wrapping C/C++ Methods of Dynamsoft Barcode SDK for Python][3]
+
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
+[3]:http://www.codepool.biz/wrap-c-barcode-sdk-for-python/
