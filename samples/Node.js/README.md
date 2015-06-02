@@ -18,5 +18,10 @@ How to Run
 ```
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/node_barcode.png)
 
+Blog
+-----
+[Making Dynamsoft Barcode SDK an Addon for Node.js][3]
+
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
+[3]:http://www.codepool.biz/making-barcode-addon-for-nodejs.html
