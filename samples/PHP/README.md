@@ -37,6 +37,11 @@ How to Build and Run
     ```
 ![image](http://www.codepool.biz/wp-content/uploads/2015/06/php_barcode_extension.png)
 
+Blog
+----
+[Making PHP Barcode Extension with Dynamsoft Barcode SDK][4]
+
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
 [3]:http://windows.php.net/download/
+[4]:http://www.codepool.biz/php-windows-barcode-reader-extension.html
