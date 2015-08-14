@@ -47,6 +47,8 @@ Partial Class Form1
         Me.tbMaximumNum = New System.Windows.Forms.TextBox
         Me.label1 = New System.Windows.Forms.Label
         Me.gbBarcodeType = New System.Windows.Forms.GroupBox
+        Me.chkQRCode = New System.Windows.Forms.CheckBox
+        Me.chkIndustrial25 = New System.Windows.Forms.CheckBox
         Me.chkFitWindow = New System.Windows.Forms.CheckBox
         CType(Me.imageViewer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panel1.SuspendLayout()
@@ -62,11 +64,11 @@ Partial Class Form1
         Me.chkEAN8.AutoSize = True
         Me.chkEAN8.Checked = True
         Me.chkEAN8.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkEAN8.Location = New System.Drawing.Point(179, 97)
+        Me.chkEAN8.Location = New System.Drawing.Point(111, 117)
         Me.chkEAN8.Name = "chkEAN8"
-        Me.chkEAN8.Size = New System.Drawing.Size(54, 17)
+        Me.chkEAN8.Size = New System.Drawing.Size(57, 17)
         Me.chkEAN8.TabIndex = 8
-        Me.chkEAN8.Text = "EAN8"
+        Me.chkEAN8.Text = "EAN-8"
         Me.chkEAN8.UseVisualStyleBackColor = True
         '
         'btnOpenImage
@@ -80,7 +82,7 @@ Partial Class Form1
         '
         'btnSelectAll
         '
-        Me.btnSelectAll.Location = New System.Drawing.Point(201, 131)
+        Me.btnSelectAll.Location = New System.Drawing.Point(187, 117)
         Me.btnSelectAll.Name = "btnSelectAll"
         Me.btnSelectAll.Size = New System.Drawing.Size(75, 23)
         Me.btnSelectAll.TabIndex = 9
@@ -111,11 +113,11 @@ Partial Class Form1
         Me.chkEAN13.AutoSize = True
         Me.chkEAN13.Checked = True
         Me.chkEAN13.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkEAN13.Location = New System.Drawing.Point(179, 74)
+        Me.chkEAN13.Location = New System.Drawing.Point(111, 89)
         Me.chkEAN13.Name = "chkEAN13"
-        Me.chkEAN13.Size = New System.Drawing.Size(60, 17)
+        Me.chkEAN13.Size = New System.Drawing.Size(63, 17)
         Me.chkEAN13.TabIndex = 7
-        Me.chkEAN13.Text = "EAN13"
+        Me.chkEAN13.Text = "EAN-13"
         Me.chkEAN13.UseVisualStyleBackColor = True
         '
         'lbDiv
@@ -133,11 +135,11 @@ Partial Class Form1
         Me.chkUPCE.AutoSize = True
         Me.chkUPCE.Checked = True
         Me.chkUPCE.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkUPCE.Location = New System.Drawing.Point(179, 51)
+        Me.chkUPCE.Location = New System.Drawing.Point(110, 61)
         Me.chkUPCE.Name = "chkUPCE"
-        Me.chkUPCE.Size = New System.Drawing.Size(55, 17)
+        Me.chkUPCE.Size = New System.Drawing.Size(58, 17)
         Me.chkUPCE.TabIndex = 6
-        Me.chkUPCE.Text = "UPCE"
+        Me.chkUPCE.Text = "UPC-E"
         Me.chkUPCE.UseVisualStyleBackColor = True
         '
         'chkUPCA
@@ -145,11 +147,11 @@ Partial Class Form1
         Me.chkUPCA.AutoSize = True
         Me.chkUPCA.Checked = True
         Me.chkUPCA.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkUPCA.Location = New System.Drawing.Point(179, 28)
+        Me.chkUPCA.Location = New System.Drawing.Point(111, 33)
         Me.chkUPCA.Name = "chkUPCA"
-        Me.chkUPCA.Size = New System.Drawing.Size(55, 17)
+        Me.chkUPCA.Size = New System.Drawing.Size(58, 17)
         Me.chkUPCA.TabIndex = 5
-        Me.chkUPCA.Text = "UPCA"
+        Me.chkUPCA.Text = "UPC-A"
         Me.chkUPCA.UseVisualStyleBackColor = True
         '
         'picboxPrevious
@@ -190,11 +192,11 @@ Partial Class Form1
         Me.chkITF.AutoSize = True
         Me.chkITF.Checked = True
         Me.chkITF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkITF.Location = New System.Drawing.Point(11, 120)
+        Me.chkITF.Location = New System.Drawing.Point(187, 33)
         Me.chkITF.Name = "chkITF"
-        Me.chkITF.Size = New System.Drawing.Size(42, 17)
+        Me.chkITF.Size = New System.Drawing.Size(109, 17)
         Me.chkITF.TabIndex = 4
-        Me.chkITF.Text = "ITF"
+        Me.chkITF.Text = "Interleaved 2 of 5"
         Me.chkITF.UseVisualStyleBackColor = True
         '
         'tbxCurrentImageIndex
@@ -213,7 +215,7 @@ Partial Class Form1
         Me.chkCodabar.AutoSize = True
         Me.chkCodabar.Checked = True
         Me.chkCodabar.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkCodabar.Location = New System.Drawing.Point(11, 97)
+        Me.chkCodabar.Location = New System.Drawing.Point(23, 117)
         Me.chkCodabar.Name = "chkCodabar"
         Me.chkCodabar.Size = New System.Drawing.Size(66, 17)
         Me.chkCodabar.TabIndex = 3
@@ -225,11 +227,11 @@ Partial Class Form1
         Me.chkCode93.AutoSize = True
         Me.chkCode93.Checked = True
         Me.chkCode93.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkCode93.Location = New System.Drawing.Point(11, 74)
+        Me.chkCode93.Location = New System.Drawing.Point(23, 89)
         Me.chkCode93.Name = "chkCode93"
-        Me.chkCode93.Size = New System.Drawing.Size(63, 17)
+        Me.chkCode93.Size = New System.Drawing.Size(66, 17)
         Me.chkCode93.TabIndex = 2
-        Me.chkCode93.Text = "Code93"
+        Me.chkCode93.Text = "Code 93"
         Me.chkCode93.UseVisualStyleBackColor = True
         '
         'chkCode128
@@ -237,11 +239,11 @@ Partial Class Form1
         Me.chkCode128.AutoSize = True
         Me.chkCode128.Checked = True
         Me.chkCode128.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkCode128.Location = New System.Drawing.Point(11, 51)
+        Me.chkCode128.Location = New System.Drawing.Point(23, 61)
         Me.chkCode128.Name = "chkCode128"
-        Me.chkCode128.Size = New System.Drawing.Size(69, 17)
+        Me.chkCode128.Size = New System.Drawing.Size(72, 17)
         Me.chkCode128.TabIndex = 1
-        Me.chkCode128.Text = "Code128"
+        Me.chkCode128.Text = "Code 128"
         Me.chkCode128.UseVisualStyleBackColor = True
         '
         'tbxTotalImageNum
@@ -270,11 +272,11 @@ Partial Class Form1
         Me.chkCode39.AutoSize = True
         Me.chkCode39.Checked = True
         Me.chkCode39.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkCode39.Location = New System.Drawing.Point(11, 28)
+        Me.chkCode39.Location = New System.Drawing.Point(23, 33)
         Me.chkCode39.Name = "chkCode39"
-        Me.chkCode39.Size = New System.Drawing.Size(63, 17)
+        Me.chkCode39.Size = New System.Drawing.Size(66, 17)
         Me.chkCode39.TabIndex = 0
-        Me.chkCode39.Text = "Code39"
+        Me.chkCode39.Text = "Code 39"
         Me.chkCode39.UseVisualStyleBackColor = True
         '
         'btnRead
@@ -316,6 +318,8 @@ Partial Class Form1
         '
         'gbBarcodeType
         '
+        Me.gbBarcodeType.Controls.Add(Me.chkQRCode)
+        Me.gbBarcodeType.Controls.Add(Me.chkIndustrial25)
         Me.gbBarcodeType.Controls.Add(Me.btnSelectAll)
         Me.gbBarcodeType.Controls.Add(Me.chkEAN8)
         Me.gbBarcodeType.Controls.Add(Me.chkEAN13)
@@ -332,6 +336,30 @@ Partial Class Form1
         Me.gbBarcodeType.TabIndex = 88
         Me.gbBarcodeType.TabStop = False
         Me.gbBarcodeType.Text = "Barcode Type"
+        '
+        'chkQRCode
+        '
+        Me.chkQRCode.AutoSize = True
+        Me.chkQRCode.Checked = True
+        Me.chkQRCode.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkQRCode.Location = New System.Drawing.Point(187, 89)
+        Me.chkQRCode.Name = "chkQRCode"
+        Me.chkQRCode.Size = New System.Drawing.Size(67, 17)
+        Me.chkQRCode.TabIndex = 11
+        Me.chkQRCode.Text = "QRCode"
+        Me.chkQRCode.UseVisualStyleBackColor = True
+        '
+        'chkIndustrial25
+        '
+        Me.chkIndustrial25.AutoSize = True
+        Me.chkIndustrial25.Checked = True
+        Me.chkIndustrial25.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkIndustrial25.Location = New System.Drawing.Point(187, 61)
+        Me.chkIndustrial25.Name = "chkIndustrial25"
+        Me.chkIndustrial25.Size = New System.Drawing.Size(98, 17)
+        Me.chkIndustrial25.TabIndex = 10
+        Me.chkIndustrial25.Text = "Industrial 2 of 5"
+        Me.chkIndustrial25.UseVisualStyleBackColor = True
         '
         'chkFitWindow
         '
@@ -363,6 +391,7 @@ Partial Class Form1
         Me.Controls.Add(Me.label1)
         Me.Controls.Add(Me.gbBarcodeType)
         Me.Controls.Add(Me.chkFitWindow)
+        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.Name = "Form1"
@@ -406,5 +435,7 @@ Partial Class Form1
     Private WithEvents label1 As System.Windows.Forms.Label
     Private WithEvents gbBarcodeType As System.Windows.Forms.GroupBox
     Private WithEvents chkFitWindow As System.Windows.Forms.CheckBox
+    Friend WithEvents chkQRCode As System.Windows.Forms.CheckBox
+    Friend WithEvents chkIndustrial25 As System.Windows.Forms.CheckBox
 
 End Class

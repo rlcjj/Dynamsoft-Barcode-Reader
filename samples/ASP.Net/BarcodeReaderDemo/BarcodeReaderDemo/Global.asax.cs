@@ -17,6 +17,12 @@ namespace BarcodeWeb
         protected void Session_Start(object sender, EventArgs e)
         {
             Session["SessionID"] = System.Web.HttpContext.Current.Session.SessionID.ToString();
+            try
+            {
+                BarcodeMode.DeleteFolder(Session["SessionID"].ToString());
+                Session.Timeout = 20;
+            }
+            catch { }
             BarcodeMode.CreateFolder(Session["SessionID"].ToString());
         }
 

@@ -8,11 +8,14 @@ Imports System
 Public Class Form1
 
     Private m_bFitWindow As Boolean = False
-    Private m_data As List(Of Image) = New List(Of Image)()
-    Private m_results As Dictionary(Of Image, Image) = New Dictionary(Of Image, Image)()
+    Private m_data As Image = Nothing
+    Private iPageCount As Integer = 0
+    Private m_results As List(Of Integer()) = New List(Of Integer())()
+    Private m_barcodes As BarcodeResult() = Nothing
     Private m_index As Integer = -1
     Private filePath As String = Nothing
     Private lastOpenedDirectory As String = Application.ExecutablePath
+    Private Const iFormatCount As Integer = 11
     Private iCheckedFormatCount As Integer = 0
 
     Public Property FitWindow() As Boolean
@@ -41,7 +44,7 @@ Public Class Form1
             Return m_index
         End Get
         Set(ByVal value As Integer)
-            If (value >= 0 And value < m_data.Count And (Not m_index = value)) Then
+            If (value >= 0 And value < iPageCount And (Not m_index = value)) Then
                 m_index = value
                 tbxCurrentImageIndex.Text = (value + 1).ToString()
             End If
@@ -93,75 +96,69 @@ Public Class Form1
         End If
     End Sub
 
+    Declare Auto Sub CopyMemory Lib "kernel32.dll" Alias "CopyMemory" (ByVal dest As IntPtr, ByVal src As IntPtr, ByVal count As Integer)
+
+    Function Clone(ByVal img As Bitmap, ByVal format As PixelFormat) As Bitmap
+        Dim bmp As Bitmap = Nothing
+        Dim data As BitmapData = Nothing
+        Dim data2 As BitmapData = Nothing
+        Try
+            data = img.LockBits(New Rectangle(0, 0, img.Width, img.Height), ImageLockMode.ReadOnly, format)
+            Dim len As Integer = data.Stride * img.Height
+            bmp = New Bitmap(img.Width, img.Height, format)
+            data2 = bmp.LockBits(New Rectangle(0, 0, img.Width, img.Height), ImageLockMode.ReadWrite, format)
+            CopyMemory(data2.Scan0, data.Scan0, len)
+            img.UnlockBits(data)
+            bmp.UnlockBits(data2)
+            data = Nothing
+            data2 = Nothing
+        Catch
+        Finally
+            If (Not data Is Nothing) Then
+                img.UnlockBits(data)
+            End If
+            If (Not data2 Is Nothing) Then
+                bmp.UnlockBits(data2)
+            End If
+        End Try
+
+        Return bmp
+    End Function
+
     Private Sub btnOpenImage_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnOpenImage.Click
         Try
             Dim dlg As OpenFileDialog = New OpenFileDialog()
-            dlg.Filter = "All Supported Images(*.BMP,*.PNG,*.JPEG,*.JPG,*.JPE,*.JFIF,*.TIF,*.TIFF)|*.BMP;*.PNG;*.JPEG;*.JPG;*.JPE;*.JFIF;*.TIF;*.TIFF|JPEG|*.JPG;*.JPEG;*.JPE;*.JFIF|BMP|*.BMP|PNG|*.PNG|TIFF|*.TIF;*.TIFF"
-            'dlg.Multiselect = true;
+            dlg.Filter = "All Supported Images(*.BMP,*.PNG,*.JPEG,*.JPG,*.JPE,*.JFIF,*.TIF,*.TIFF,*.GIF)|*.BMP;*.PNG;*.JPEG;*.JPG;*.JPE;*.JFIF;*.TIF;*.TIFF;*.GIF|JPEG|*.JPG;*.JPEG;*.JPE;*.JFIF|BMP|*.BMP|PNG|*.PNG|TIFF|*.TIF;*.TIFF|GIF|*.GIF"
             dlg.InitialDirectory = lastOpenedDirectory
             If (dlg.ShowDialog() = DialogResult.OK) Then
                 lastOpenedDirectory = System.IO.Directory.GetParent(dlg.FileName).FullName
-                Dim i As Integer
-                For i = 0 To m_data.Count - 1
-                    If Not m_data(i) Is Nothing Then
-                        If m_results.ContainsKey(m_data(i)) Then
-                            If Not m_results(m_data(i)) Is Nothing Then
-                                m_results(m_data(i)).Dispose()
-                            End If
-                        End If
-                        m_data(i).Dispose()
-                    End If
-                Next
-                m_data.Clear()
+                If Not m_data Is Nothing Then
+                    m_data.Dispose()
+                    m_data = Nothing
+                    iPageCount = 0
+                End If
                 m_results.Clear()
                 tbResults.Clear()
 
-                'foreach (string file in dlg.FileNames)
-                '{
-                filePath = dlg.FileName
-                Dim img As Image = Nothing
-                Try
-                    img = Image.FromFile(filePath)
-                    Dim frameGuid As Guid = img.FrameDimensionsList(0)
-                    Dim demension As FrameDimension = New FrameDimension(frameGuid)
-                    Dim pageCount As Integer = img.GetFrameCount(demension)
-                    Dim k As Integer
-                    Dim lastExceptionalIndice As System.Collections.ArrayList = New System.Collections.ArrayList(pageCount)
-                    For k = 0 To pageCount - 1
-                        Try
-                            img.SelectActiveFrame(demension, k)
-                        Catch ex As Exception
-                            img.Dispose()
-                            img = Image.FromFile(filePath)
-                            If (Not lastExceptionalIndice.Contains(k)) Then
-                                lastExceptionalIndice.Add(k)
-                                If k > 0 Then
-                                    k = k - 1
-                                    If Not m_data(k) Is Nothing Then
-                                        m_data(k).Dispose()
-                                    End If
-                                    m_data.RemoveAt(k)
-                                End If
-                            End If
-                            img.SelectActiveFrame(demension, k)
-                        End Try
-                        m_data.Add(New Bitmap(img))
-                    Next
+                Me.Text = dlg.FileName
 
-                    img.Dispose()
-                    img = Nothing
-                Finally
-                    If Not img Is Nothing Then
-                        img.Dispose()
-                    End If
-                End Try
-                '}
-                If m_data.Count > 0 And iCheckedFormatCount > 0 Then
+                filePath = dlg.FileName
+                m_data = Image.FromFile(filePath)
+                Dim isGif As Boolean = m_data.RawFormat.Equals(ImageFormat.Gif)
+                If isGif Then
+                    iPageCount = 1
+                Else
+                    Dim frameGuid As Guid = m_data.FrameDimensionsList(0)
+                    Dim demension As FrameDimension = New FrameDimension(frameGuid)
+                    iPageCount = m_data.GetFrameCount(demension)
+                End If
+
+                If iPageCount > 0 And iCheckedFormatCount > 0 Then
                     btnRead.Enabled = True
                 End If
-                CurrentIndex = m_data.Count - 1
-                tbxTotalImageNum.Text = m_data.Count.ToString()
-                If (m_data.Count > 1) Then
+                CurrentIndex = iPageCount - 1
+                tbxTotalImageNum.Text = iPageCount.ToString()
+                If (iPageCount > 1) Then
                     EnableControls(picboxFirst)
                     EnableControls(picboxPrevious)
                     'EnableControls(picboxNext);
@@ -179,14 +176,76 @@ Public Class Form1
     End Sub
 
     Private Sub SetImageViewerImage()
-        If (m_results.ContainsKey(m_data(m_index))) Then
-            If (Not m_results(m_data(m_index)) Is Nothing) Then
-                imageViewer.Image = m_results(m_data(m_index))
-                Return
-            End If
+        If Not imageViewer.Image Is Nothing Then
+            Dim img As Image = imageViewer.Image
+            imageViewer.Image = Nothing
+            img.Dispose()
         End If
 
-        imageViewer.Image = m_data(m_index)
+        If m_index >= 0 And m_index < iPageCount Then
+            Dim bmp As Bitmap = Nothing
+            If iPageCount > 1 Then
+                Dim tempBmp As Bitmap = DirectCast(m_data.Clone(), Bitmap)
+                tempBmp.SelectActiveFrame(FrameDimension.Page, m_index)
+                Dim format As PixelFormat = tempBmp.PixelFormat
+                If ((((DirectCast(tempBmp.PixelFormat, Integer)) >> 8) And 255) < 24) Then
+                    format = PixelFormat.Format24bppRgb
+                End If
+                bmp = Clone(tempBmp, format)
+                tempBmp.Dispose()
+            Else
+                Dim format As PixelFormat = m_data.PixelFormat
+                If ((((DirectCast(m_data.PixelFormat, Integer)) >> 8) And 255) < 24) Then
+                    format = PixelFormat.Format24bppRgb
+                End If
+                bmp = Clone(DirectCast(m_data, Bitmap), Format)
+            End If
+
+            If Not bmp Is Nothing Then
+                Using g As Graphics = Graphics.FromImage(bmp)
+                    If m_index < m_results.Count Then
+                        Dim barcodeResults As Integer() = m_results(m_index)
+                        If Not barcodeResults Is Nothing Then
+                            If barcodeResults.Length > 0 Then
+                                Dim fsize As Single = bmp.Width / 64.0F
+                                If (fsize < 12) Then
+                                    fsize = 12
+                                End If
+                                Dim lineWidth As Single = fsize / 12
+                                If lineWidth < 1 Then
+                                    lineWidth = 1
+                                End If
+                                Dim pen As Pen = New Pen(Color.Red, lineWidth)
+                                Dim textBrush As Brush = New SolidBrush(Color.Blue)
+                                Dim textFont As Font = New Font("Times New Roman", fsize, FontStyle.Bold)
+                                Dim i As Integer
+                                For i = barcodeResults.Length - 1 To 0 Step -1
+                                    Dim barcodeResult As BarcodeResult = m_barcodes(barcodeResults(i))
+                                    If Not barcodeResult Is Nothing Then
+                                        Dim rect As Rectangle = barcodeResult.BoundingRect
+                                        g.DrawRectangle(pen, rect)
+                                        Dim strText As String = "[" + (barcodeResults(i) + 1).ToString() + "] {" + barcodeResult.BarcodeText + "}"
+                                        Dim size As SizeF = g.MeasureString(strText, textFont)
+                                        'int iWidth = rect.Width + (((int)textFont.Size) >> 1);
+                                        Dim iHeight As Integer = (CInt(size.Height) + 1) ' *((int)(size.Width / rect.Width + 1));//textFont.Height * 3 / 2;
+                                        Dim iTop As Integer = rect.Top - iHeight
+                                        If iTop < 0 Then
+                                            iTop = 0
+                                        End If
+                                        g.DrawString(strText, textFont, textBrush, New Rectangle(rect.Left, iTop, 0, iHeight), New StringFormat(StringFormatFlags.NoClip Or StringFormatFlags.NoWrap))
+                                    End If
+                                Next
+                                pen.Dispose()
+                                textBrush.Dispose()
+                                textFont.Dispose()
+                            End If
+                        End If
+                    End If
+
+                    imageViewer.Image = bmp
+                End Using
+            End If
+        End If
     End Sub
 
     Private Function GetFormats() As BarcodeFormat
@@ -254,9 +313,23 @@ Public Class Form1
                 formats = formats Or BarcodeFormat.EAN_13
             End If
         End If
+        If (chkIndustrial25.Checked) Then
+            If (Not formats.HasValue) Then
+                formats = BarcodeFormat.INDUSTRIAL_25
+            Else
+                formats = formats Or BarcodeFormat.INDUSTRIAL_25
+            End If
+        End If
+        If (chkQRCode.Checked) Then
+            If (Not formats.HasValue) Then
+                formats = BarcodeFormat.QR_CODE
+            Else
+                formats = formats Or BarcodeFormat.QR_CODE
+            End If
+        End If
 
         If Not formats.HasValue Then
-            Return BarcodeFormat.OneD
+            Return BarcodeFormat.OneD Or BarcodeFormat.QR_CODE
         Else
             Return formats.Value
         End If
@@ -287,17 +360,12 @@ Public Class Form1
 
     Private Sub ShowBarcodeResults(ByVal barcodeResults As BarcodeResult(), ByVal timeElapsed As Single)
         tbResults.Clear()
-        Dim imgs As List(Of Image) = New List(Of Image)(m_results.Keys)
-        For Each img As Image In imgs
-            If Not m_results(img) Is Nothing Then
-                m_results(img).Dispose()
-                m_results(img) = Nothing
-            End If
-        Next
+        m_results.Clear()
+        m_barcodes = barcodeResults
 
         If (Not barcodeResults Is Nothing) Then
             If barcodeResults.Length > 0 Then
-                tbResults.AppendText(String.Format("Total barcode(s) found: {0}. Total cost time: {1} seconds{2}", barcodeResults.Length, (timeElapsed / 1000), vbCrLf))
+                tbResults.AppendText(String.Format("Total barcode(s) found: {0}. Total cost time: {1} seconds{2}{3}", barcodeResults.Length, (timeElapsed / 1000), vbCrLf, vbCrLf))
                 Dim i As Integer
                 For i = 0 To barcodeResults.Length - 1
                     tbResults.AppendText(String.Format("  Barcode: {0}{1}", (i + 1).ToString(), vbCrLf))
@@ -308,69 +376,68 @@ Public Class Form1
                                                        barcodeResults(i).BoundingRect.Top.ToString(), barcodeResults(i).BoundingRect.Width.ToString(), barcodeResults(i).BoundingRect.Height.ToString(), vbCrLf))
                     tbResults.AppendText(vbCrLf)
                 Next
+                tbResults.SelectionStart = 0
+                tbResults.ScrollToCaret()
 
-                Dim pen As Pen = New Pen(Color.Red, 1)
-                Dim textBrush As Brush = New SolidBrush(Color.Blue)
-                Dim img As Image = Nothing
-                Dim g As Graphics = Nothing
-                Dim index As Integer = -1
-                For i = barcodeResults.Length - 1 To 0 Step -1
-                    If (Not barcodeResults(i) Is Nothing) Then
-                        If (Not barcodeResults(i).PageNumber = (index + 1)) Then
-                            If (Not g Is Nothing) Then
-                                g.Dispose()
-                            End If
-                            If (Not img Is Nothing And index >= 0 And index < m_data.Count) Then
-                                If (m_results.ContainsKey(m_data(index))) Then
-                                    If Not m_results(m_data(index)) Is Nothing Then
-                                        m_results(m_data(index)).Dispose()
-                                    End If
-                                    m_results(m_data(index)) = img
+                Dim iLastPageNumber As Integer = Integer.MinValue + 10
+                Dim iStartIndex As Integer = barcodeResults.Length - 1
+                For i = 0 To iPageCount - 1 Step 1
+                    m_results.Add(Nothing)
+                Next
+                For i = iStartIndex To 0 Step -1
+                    If Not barcodeResults(i) Is Nothing Then
+                        If Not barcodeResults(i).PageNumber = iLastPageNumber Then
+                            If Not i = iStartIndex Then
+                                Dim iEnd As Integer = i
+                                Dim iStart As Integer = iStartIndex
+                                If i > iStartIndex Then
+                                    iEnd = i - 1
                                 Else
-                                    m_results.Add(m_data(index), img)
+                                    iEnd = i + 1
                                 End If
-                            End If
+                                If iEnd < iStart Then
+                                    Dim temp As Integer = iStart
+                                    iStart = iEnd
+                                    iEnd = temp
+                                End If
 
-                            index = barcodeResults(i).PageNumber - 1
-                            img = DirectCast(m_data(index).Clone(), Image)
-                            g = Graphics.FromImage(img)
+                                Dim resultsOnePage As Integer() = New Integer(iEnd - iStart) {}
+                                Dim k As Integer
+                                For k = iStart To iEnd Step 1
+                                    resultsOnePage(k - iStart) = k
+                                Next
+                                m_results(iLastPageNumber - 1) = resultsOnePage
+                            End If
+                            iStartIndex = i
+                            iLastPageNumber = barcodeResults(i).PageNumber
                         End If
-                        Dim rect As Rectangle = barcodeResults(i).BoundingRect
-                        g.DrawRectangle(pen, rect)
-                        Dim textFont As Font = SystemFonts.DefaultFont
-                        Dim iHeight As Integer = textFont.Height * 3 / 2
-                        Dim iTop As Integer
-                        If rect.Top - iHeight < 0 Then
-                            iTop = 0
-                        Else
-                            iTop = rect.Top - iHeight
+
+                        If i = 0 Then
+                            Dim iEnd As Integer = i
+                            Dim iStart As Integer = iStartIndex
+                            If iEnd < iStart Then
+                                Dim temp As Integer = iStart
+                                iStart = iEnd
+                                iEnd = temp
+                            End If
+                            Dim resultsOnePage As Integer() = New Integer(iEnd - iStart) {}
+                            Dim k As Integer
+                            For k = iStart To iEnd Step 1
+                                resultsOnePage(k - iStart) = k
+                            Next
+                            m_results(iLastPageNumber - 1) = resultsOnePage
                         End If
-                        g.DrawString("[" + i.ToString() + "] {" + barcodeResults(i).BarcodeText + "}", textFont, textBrush, New Rectangle(rect.Left, iTop, 0, iHeight), New StringFormat(StringFormatFlags.NoClip Or StringFormatFlags.NoWrap))
                     End If
                 Next
-                pen.Dispose()
-                textBrush.Dispose()
-                If (Not g Is Nothing) Then
-                    g.Dispose()
-                End If
-                If (Not img Is Nothing And index >= 0 And index < m_data.Count) Then
-                    If (m_results.ContainsKey(m_data(index))) Then
-                        If Not m_results(m_data(index)) Is Nothing Then
-                            m_results(m_data(index)).Dispose()
-                        End If
-                        m_results(m_data(index)) = img
-                    Else
-                        m_results.Add(m_data(index), img)
-                    End If
-                End If
 
-                SetImageViewerImage()
             Else
                 tbResults.AppendText("No barcode found. Total time spent: " + (timeElapsed / 1000).ToString() + " seconds" + vbCrLf)
             End If
         Else
             tbResults.AppendText("No barcode found. Total time spent: " + (timeElapsed / 1000).ToString() + " seconds" + vbCrLf)
         End If
+
+        SetImageViewerImage()
     End Sub
 
     Private Sub tbMaximumNum_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs)
@@ -454,7 +521,7 @@ Public Class Form1
 
     Private Sub picboxLast_Click(ByVal sender As Object, ByVal e As EventArgs) Handles picboxLast.Click
         If (picboxLast.Enabled) Then
-            CurrentIndex = m_data.Count - 1
+            CurrentIndex = iPageCount - 1
             DisableControls(picboxLast)
             DisableControls(picboxNext)
             EnableControls(picboxPrevious)
@@ -477,7 +544,7 @@ Public Class Form1
     Private Sub picboxNext_Click(ByVal sender As Object, ByVal e As EventArgs) Handles picboxNext.Click
         CurrentIndex = CurrentIndex + 1
         If (picboxNext.Enabled) Then
-            If (CurrentIndex = m_data.Count - 1) Then
+            If (CurrentIndex = iPageCount - 1) Then
                 DisableControls(picboxLast)
                 DisableControls(picboxNext)
             End If
@@ -488,7 +555,7 @@ Public Class Form1
 
 #End Region
 
-    Private Sub chkFormat_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles chkCodabar.CheckedChanged, chkCode128.CheckedChanged, chkCode39.CheckedChanged, chkCode93.CheckedChanged, chkEAN13.CheckedChanged, chkEAN8.CheckedChanged, chkITF.CheckedChanged, chkUPCA.CheckedChanged, chkUPCE.CheckedChanged
+    Private Sub chkFormat_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles chkCodabar.CheckedChanged, chkCode128.CheckedChanged, chkCode39.CheckedChanged, chkCode93.CheckedChanged, chkEAN13.CheckedChanged, chkEAN8.CheckedChanged, chkITF.CheckedChanged, chkUPCA.CheckedChanged, chkUPCE.CheckedChanged, chkQRCode.CheckedChanged, chkIndustrial25.CheckedChanged
         Dim chkbox As CheckBox = DirectCast(sender, CheckBox)
         If (chkbox.Checked) Then
             iCheckedFormatCount = iCheckedFormatCount + 1
@@ -496,13 +563,13 @@ Public Class Form1
             iCheckedFormatCount = iCheckedFormatCount - 1
         End If
 
-        If (m_data.Count > 0 And iCheckedFormatCount > 0) Then
+        If (iPageCount > 0 And iCheckedFormatCount > 0) Then
             btnRead.Enabled = True
         Else
             btnRead.Enabled = False
         End If
 
-        If (iCheckedFormatCount < 9) Then
+        If (iCheckedFormatCount < iFormatCount) Then
             btnSelectAll.Text = "Select All"
         Else
             btnSelectAll.Text = "Unselect All"

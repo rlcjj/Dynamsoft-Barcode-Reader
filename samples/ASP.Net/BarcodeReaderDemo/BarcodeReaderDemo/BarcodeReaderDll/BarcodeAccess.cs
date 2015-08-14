@@ -78,26 +78,26 @@ namespace BarcodeDLL
             {
                 using (MemoryStream memdata = new MemoryStream(data))
                 {
-                    string strAryFileNmae = "";
+                    string strAryFileName = "";
                     using (Bitmap map = new Bitmap(memdata))
                     { 
                         string strFileNameTemp = strFileName;
                         int pages = map.GetFrameCount(FrameDimension.Page);
                         for(int i= 0; i< pages; i++)
                         {
-                            if (strAryFileNmae.Length == 0)
-                                strAryFileNmae = strAryFileNmae + strFileNameTemp;
+                            if (strAryFileName.Length == 0)
+                                strAryFileName = strAryFileName + strFileNameTemp;
                             else
-                                strAryFileNmae = strAryFileNmae + ":" + strFileNameTemp;
+                                strAryFileName = strAryFileName + ":" + strFileNameTemp;
                             map.SelectActiveFrame(FrameDimension.Page, i);
                             Bitmap bitmap = new Bitmap(map);
-                            bitmap.Save(UploadFolder + System.IO.Path.DirectorySeparatorChar + strSessionID + System.IO.Path.DirectorySeparatorChar + strFileNameTemp, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            bitmap.Save(UploadFolder + System.IO.Path.DirectorySeparatorChar + strSessionID + System.IO.Path.DirectorySeparatorChar + strFileNameTemp, System.Drawing.Imaging.ImageFormat.Png);
                             if (bitmap != null)
                                 bitmap.Dispose();
                             strFileNameTemp = (i + 1).ToString() + strFileName;
                         }
                     }
-                    strFileName = strAryFileNmae;
+                    strFileName = strAryFileName;
                 }
             }
             else
@@ -113,7 +113,7 @@ namespace BarcodeDLL
         {
             string strFileName = GetNextFileIndex(strFileExt, strSessionID);
 
-            map.Save(UploadFolder + System.IO.Path.DirectorySeparatorChar + strSessionID + System.IO.Path.DirectorySeparatorChar + strFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            map.Save(UploadFolder + System.IO.Path.DirectorySeparatorChar + strSessionID + System.IO.Path.DirectorySeparatorChar + strFileName, System.Drawing.Imaging.ImageFormat.Png);
           
             return strFileName;
         }

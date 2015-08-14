@@ -31,17 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnOpenImage = new System.Windows.Forms.Button();
             this.chkFitWindow = new System.Windows.Forms.CheckBox();
-            this.gbBarcodeType = new System.Windows.Forms.GroupBox();
-            this.btnSelectAll = new System.Windows.Forms.Button();
-            this.chkEAN8 = new System.Windows.Forms.CheckBox();
-            this.chkEAN13 = new System.Windows.Forms.CheckBox();
-            this.chkUPCE = new System.Windows.Forms.CheckBox();
-            this.chkUPCA = new System.Windows.Forms.CheckBox();
-            this.chkITF = new System.Windows.Forms.CheckBox();
-            this.chkCodabar = new System.Windows.Forms.CheckBox();
-            this.chkCode93 = new System.Windows.Forms.CheckBox();
-            this.chkCode128 = new System.Windows.Forms.CheckBox();
-            this.chkCode39 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbMaximumNum = new System.Windows.Forms.TextBox();
             this.tbResults = new System.Windows.Forms.TextBox();
@@ -55,13 +44,26 @@
             this.picboxNext = new System.Windows.Forms.PictureBox();
             this.picboxLast = new System.Windows.Forms.PictureBox();
             this.picboxFirst = new System.Windows.Forms.PictureBox();
-            this.gbBarcodeType.SuspendLayout();
+            this.gbBarcodeType = new System.Windows.Forms.GroupBox();
+            this.chkQRCode = new System.Windows.Forms.CheckBox();
+            this.chkIndustrial25 = new System.Windows.Forms.CheckBox();
+            this.btnSelectAll = new System.Windows.Forms.Button();
+            this.chkEAN8 = new System.Windows.Forms.CheckBox();
+            this.chkEAN13 = new System.Windows.Forms.CheckBox();
+            this.chkUPCE = new System.Windows.Forms.CheckBox();
+            this.chkUPCA = new System.Windows.Forms.CheckBox();
+            this.chkITF = new System.Windows.Forms.CheckBox();
+            this.chkCodabar = new System.Windows.Forms.CheckBox();
+            this.chkCode93 = new System.Windows.Forms.CheckBox();
+            this.chkCode128 = new System.Windows.Forms.CheckBox();
+            this.chkCode39 = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picboxPrevious)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picboxNext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picboxLast)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picboxFirst)).BeginInit();
+            this.gbBarcodeType.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOpenImage
@@ -84,152 +86,6 @@
             this.chkFitWindow.Text = "Fit Window";
             this.chkFitWindow.UseVisualStyleBackColor = true;
             this.chkFitWindow.CheckedChanged += new System.EventHandler(this.chkFitWindow_CheckedChanged);
-            // 
-            // gbBarcodeType
-            // 
-            this.gbBarcodeType.Controls.Add(this.btnSelectAll);
-            this.gbBarcodeType.Controls.Add(this.chkEAN8);
-            this.gbBarcodeType.Controls.Add(this.chkEAN13);
-            this.gbBarcodeType.Controls.Add(this.chkUPCE);
-            this.gbBarcodeType.Controls.Add(this.chkUPCA);
-            this.gbBarcodeType.Controls.Add(this.chkITF);
-            this.gbBarcodeType.Controls.Add(this.chkCodabar);
-            this.gbBarcodeType.Controls.Add(this.chkCode93);
-            this.gbBarcodeType.Controls.Add(this.chkCode128);
-            this.gbBarcodeType.Controls.Add(this.chkCode39);
-            this.gbBarcodeType.Location = new System.Drawing.Point(468, 54);
-            this.gbBarcodeType.Name = "gbBarcodeType";
-            this.gbBarcodeType.Size = new System.Drawing.Size(312, 160);
-            this.gbBarcodeType.TabIndex = 2;
-            this.gbBarcodeType.TabStop = false;
-            this.gbBarcodeType.Text = "Barcode Type";
-            // 
-            // btnSelectAll
-            // 
-            this.btnSelectAll.Location = new System.Drawing.Point(201, 131);
-            this.btnSelectAll.Name = "btnSelectAll";
-            this.btnSelectAll.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectAll.TabIndex = 9;
-            this.btnSelectAll.Text = "Unselect All";
-            this.btnSelectAll.UseVisualStyleBackColor = true;
-            this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
-            // 
-            // chkEAN8
-            // 
-            this.chkEAN8.AutoSize = true;
-            this.chkEAN8.Checked = true;
-            this.chkEAN8.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEAN8.Location = new System.Drawing.Point(179, 97);
-            this.chkEAN8.Name = "chkEAN8";
-            this.chkEAN8.Size = new System.Drawing.Size(54, 17);
-            this.chkEAN8.TabIndex = 8;
-            this.chkEAN8.Text = "EAN8";
-            this.chkEAN8.UseVisualStyleBackColor = true;
-            this.chkEAN8.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkEAN13
-            // 
-            this.chkEAN13.AutoSize = true;
-            this.chkEAN13.Checked = true;
-            this.chkEAN13.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEAN13.Location = new System.Drawing.Point(179, 74);
-            this.chkEAN13.Name = "chkEAN13";
-            this.chkEAN13.Size = new System.Drawing.Size(60, 17);
-            this.chkEAN13.TabIndex = 7;
-            this.chkEAN13.Text = "EAN13";
-            this.chkEAN13.UseVisualStyleBackColor = true;
-            this.chkEAN13.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkUPCE
-            // 
-            this.chkUPCE.AutoSize = true;
-            this.chkUPCE.Checked = true;
-            this.chkUPCE.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUPCE.Location = new System.Drawing.Point(179, 51);
-            this.chkUPCE.Name = "chkUPCE";
-            this.chkUPCE.Size = new System.Drawing.Size(55, 17);
-            this.chkUPCE.TabIndex = 6;
-            this.chkUPCE.Text = "UPCE";
-            this.chkUPCE.UseVisualStyleBackColor = true;
-            this.chkUPCE.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkUPCA
-            // 
-            this.chkUPCA.AutoSize = true;
-            this.chkUPCA.Checked = true;
-            this.chkUPCA.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUPCA.Location = new System.Drawing.Point(179, 28);
-            this.chkUPCA.Name = "chkUPCA";
-            this.chkUPCA.Size = new System.Drawing.Size(55, 17);
-            this.chkUPCA.TabIndex = 5;
-            this.chkUPCA.Text = "UPCA";
-            this.chkUPCA.UseVisualStyleBackColor = true;
-            this.chkUPCA.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkITF
-            // 
-            this.chkITF.AutoSize = true;
-            this.chkITF.Checked = true;
-            this.chkITF.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkITF.Location = new System.Drawing.Point(11, 120);
-            this.chkITF.Name = "chkITF";
-            this.chkITF.Size = new System.Drawing.Size(42, 17);
-            this.chkITF.TabIndex = 4;
-            this.chkITF.Text = "ITF";
-            this.chkITF.UseVisualStyleBackColor = true;
-            this.chkITF.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkCodabar
-            // 
-            this.chkCodabar.AutoSize = true;
-            this.chkCodabar.Checked = true;
-            this.chkCodabar.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCodabar.Location = new System.Drawing.Point(11, 97);
-            this.chkCodabar.Name = "chkCodabar";
-            this.chkCodabar.Size = new System.Drawing.Size(66, 17);
-            this.chkCodabar.TabIndex = 3;
-            this.chkCodabar.Text = "Codabar";
-            this.chkCodabar.UseVisualStyleBackColor = true;
-            this.chkCodabar.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkCode93
-            // 
-            this.chkCode93.AutoSize = true;
-            this.chkCode93.Checked = true;
-            this.chkCode93.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCode93.Location = new System.Drawing.Point(11, 74);
-            this.chkCode93.Name = "chkCode93";
-            this.chkCode93.Size = new System.Drawing.Size(63, 17);
-            this.chkCode93.TabIndex = 2;
-            this.chkCode93.Text = "Code93";
-            this.chkCode93.UseVisualStyleBackColor = true;
-            this.chkCode93.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkCode128
-            // 
-            this.chkCode128.AutoSize = true;
-            this.chkCode128.Checked = true;
-            this.chkCode128.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCode128.Location = new System.Drawing.Point(11, 51);
-            this.chkCode128.Name = "chkCode128";
-            this.chkCode128.Size = new System.Drawing.Size(69, 17);
-            this.chkCode128.TabIndex = 1;
-            this.chkCode128.Text = "Code128";
-            this.chkCode128.UseVisualStyleBackColor = true;
-            this.chkCode128.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
-            // 
-            // chkCode39
-            // 
-            this.chkCode39.AutoSize = true;
-            this.chkCode39.Checked = true;
-            this.chkCode39.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCode39.Location = new System.Drawing.Point(11, 28);
-            this.chkCode39.Name = "chkCode39";
-            this.chkCode39.Size = new System.Drawing.Size(63, 17);
-            this.chkCode39.TabIndex = 0;
-            this.chkCode39.Text = "Code39";
-            this.chkCode39.UseVisualStyleBackColor = true;
-            this.chkCode39.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
             // 
             // label1
             // 
@@ -288,7 +144,7 @@
             this.tbxCurrentImageIndex.ReadOnly = true;
             this.tbxCurrentImageIndex.Size = new System.Drawing.Size(61, 20);
             this.tbxCurrentImageIndex.TabIndex = 83;
-            this.tbxCurrentImageIndex.Text = "0";
+            this.tbxCurrentImageIndex.Text = "-1";
             this.tbxCurrentImageIndex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lbDiv
@@ -384,6 +240,180 @@
             this.picboxFirst.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picbox_MouseUp);
             this.picboxFirst.MouseEnter += new System.EventHandler(this.picbox_MouseEnter);
             // 
+            // gbBarcodeType
+            // 
+            this.gbBarcodeType.Controls.Add(this.chkQRCode);
+            this.gbBarcodeType.Controls.Add(this.chkIndustrial25);
+            this.gbBarcodeType.Controls.Add(this.btnSelectAll);
+            this.gbBarcodeType.Controls.Add(this.chkEAN8);
+            this.gbBarcodeType.Controls.Add(this.chkEAN13);
+            this.gbBarcodeType.Controls.Add(this.chkUPCE);
+            this.gbBarcodeType.Controls.Add(this.chkUPCA);
+            this.gbBarcodeType.Controls.Add(this.chkITF);
+            this.gbBarcodeType.Controls.Add(this.chkCodabar);
+            this.gbBarcodeType.Controls.Add(this.chkCode93);
+            this.gbBarcodeType.Controls.Add(this.chkCode128);
+            this.gbBarcodeType.Controls.Add(this.chkCode39);
+            this.gbBarcodeType.Location = new System.Drawing.Point(468, 54);
+            this.gbBarcodeType.Name = "gbBarcodeType";
+            this.gbBarcodeType.Size = new System.Drawing.Size(312, 160);
+            this.gbBarcodeType.TabIndex = 2;
+            this.gbBarcodeType.TabStop = false;
+            this.gbBarcodeType.Text = "Barcode Type";
+            // 
+            // chkQRCode
+            // 
+            this.chkQRCode.AutoSize = true;
+            this.chkQRCode.Checked = true;
+            this.chkQRCode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkQRCode.Location = new System.Drawing.Point(185, 89);
+            this.chkQRCode.Name = "chkQRCode";
+            this.chkQRCode.Size = new System.Drawing.Size(67, 17);
+            this.chkQRCode.TabIndex = 11;
+            this.chkQRCode.Text = "QRCode";
+            this.chkQRCode.UseVisualStyleBackColor = true;
+            this.chkQRCode.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkIndustrial25
+            // 
+            this.chkIndustrial25.AutoSize = true;
+            this.chkIndustrial25.Checked = true;
+            this.chkIndustrial25.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIndustrial25.Location = new System.Drawing.Point(185, 60);
+            this.chkIndustrial25.Name = "chkIndustrial25";
+            this.chkIndustrial25.Size = new System.Drawing.Size(98, 17);
+            this.chkIndustrial25.TabIndex = 10;
+            this.chkIndustrial25.Text = "Industrial 2 of 5";
+            this.chkIndustrial25.UseVisualStyleBackColor = true;
+            this.chkIndustrial25.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // btnSelectAll
+            // 
+            this.btnSelectAll.Location = new System.Drawing.Point(185, 118);
+            this.btnSelectAll.Name = "btnSelectAll";
+            this.btnSelectAll.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectAll.TabIndex = 9;
+            this.btnSelectAll.Text = "Unselect All";
+            this.btnSelectAll.UseVisualStyleBackColor = true;
+            this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
+            // 
+            // chkEAN8
+            // 
+            this.chkEAN8.AutoSize = true;
+            this.chkEAN8.Checked = true;
+            this.chkEAN8.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEAN8.Location = new System.Drawing.Point(111, 89);
+            this.chkEAN8.Name = "chkEAN8";
+            this.chkEAN8.Size = new System.Drawing.Size(57, 17);
+            this.chkEAN8.TabIndex = 8;
+            this.chkEAN8.Text = "EAN-8";
+            this.chkEAN8.UseVisualStyleBackColor = true;
+            this.chkEAN8.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkEAN13
+            // 
+            this.chkEAN13.AutoSize = true;
+            this.chkEAN13.Checked = true;
+            this.chkEAN13.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEAN13.Location = new System.Drawing.Point(111, 118);
+            this.chkEAN13.Name = "chkEAN13";
+            this.chkEAN13.Size = new System.Drawing.Size(63, 17);
+            this.chkEAN13.TabIndex = 7;
+            this.chkEAN13.Text = "EAN-13";
+            this.chkEAN13.UseVisualStyleBackColor = true;
+            this.chkEAN13.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkUPCE
+            // 
+            this.chkUPCE.AutoSize = true;
+            this.chkUPCE.Checked = true;
+            this.chkUPCE.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUPCE.Location = new System.Drawing.Point(111, 60);
+            this.chkUPCE.Name = "chkUPCE";
+            this.chkUPCE.Size = new System.Drawing.Size(58, 17);
+            this.chkUPCE.TabIndex = 6;
+            this.chkUPCE.Text = "UPC-E";
+            this.chkUPCE.UseVisualStyleBackColor = true;
+            this.chkUPCE.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkUPCA
+            // 
+            this.chkUPCA.AutoSize = true;
+            this.chkUPCA.Checked = true;
+            this.chkUPCA.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUPCA.Location = new System.Drawing.Point(111, 31);
+            this.chkUPCA.Name = "chkUPCA";
+            this.chkUPCA.Size = new System.Drawing.Size(58, 17);
+            this.chkUPCA.TabIndex = 5;
+            this.chkUPCA.Text = "UPC-A";
+            this.chkUPCA.UseVisualStyleBackColor = true;
+            this.chkUPCA.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkITF
+            // 
+            this.chkITF.AutoSize = true;
+            this.chkITF.Checked = true;
+            this.chkITF.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkITF.Location = new System.Drawing.Point(185, 31);
+            this.chkITF.Name = "chkITF";
+            this.chkITF.Size = new System.Drawing.Size(109, 17);
+            this.chkITF.TabIndex = 4;
+            this.chkITF.Text = "Interleaved 2 of 5";
+            this.chkITF.UseVisualStyleBackColor = true;
+            this.chkITF.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkCodabar
+            // 
+            this.chkCodabar.AutoSize = true;
+            this.chkCodabar.Checked = true;
+            this.chkCodabar.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCodabar.Location = new System.Drawing.Point(22, 118);
+            this.chkCodabar.Name = "chkCodabar";
+            this.chkCodabar.Size = new System.Drawing.Size(66, 17);
+            this.chkCodabar.TabIndex = 3;
+            this.chkCodabar.Text = "Codabar";
+            this.chkCodabar.UseVisualStyleBackColor = true;
+            this.chkCodabar.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkCode93
+            // 
+            this.chkCode93.AutoSize = true;
+            this.chkCode93.Checked = true;
+            this.chkCode93.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCode93.Location = new System.Drawing.Point(24, 89);
+            this.chkCode93.Name = "chkCode93";
+            this.chkCode93.Size = new System.Drawing.Size(66, 17);
+            this.chkCode93.TabIndex = 2;
+            this.chkCode93.Text = "Code 93";
+            this.chkCode93.UseVisualStyleBackColor = true;
+            this.chkCode93.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkCode128
+            // 
+            this.chkCode128.AutoSize = true;
+            this.chkCode128.Checked = true;
+            this.chkCode128.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCode128.Location = new System.Drawing.Point(24, 60);
+            this.chkCode128.Name = "chkCode128";
+            this.chkCode128.Size = new System.Drawing.Size(72, 17);
+            this.chkCode128.TabIndex = 1;
+            this.chkCode128.Text = "Code 128";
+            this.chkCode128.UseVisualStyleBackColor = true;
+            this.chkCode128.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
+            // chkCode39
+            // 
+            this.chkCode39.AutoSize = true;
+            this.chkCode39.Checked = true;
+            this.chkCode39.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCode39.Location = new System.Drawing.Point(24, 31);
+            this.chkCode39.Name = "chkCode39";
+            this.chkCode39.Size = new System.Drawing.Size(66, 17);
+            this.chkCode39.TabIndex = 0;
+            this.chkCode39.Text = "Code 39";
+            this.chkCode39.UseVisualStyleBackColor = true;
+            this.chkCode39.CheckedChanged += new System.EventHandler(this.chkFormat_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -404,12 +434,11 @@
             this.Controls.Add(this.gbBarcodeType);
             this.Controls.Add(this.chkFitWindow);
             this.Controls.Add(this.btnOpenImage);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "BarcodeReaderDemo";
-            this.gbBarcodeType.ResumeLayout(false);
-            this.gbBarcodeType.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageViewer)).EndInit();
@@ -417,6 +446,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picboxNext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picboxLast)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picboxFirst)).EndInit();
+            this.gbBarcodeType.ResumeLayout(false);
+            this.gbBarcodeType.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -426,17 +457,6 @@
 
         private System.Windows.Forms.Button btnOpenImage;
         private System.Windows.Forms.CheckBox chkFitWindow;
-        private System.Windows.Forms.GroupBox gbBarcodeType;
-        private System.Windows.Forms.Button btnSelectAll;
-        private System.Windows.Forms.CheckBox chkEAN8;
-        private System.Windows.Forms.CheckBox chkEAN13;
-        private System.Windows.Forms.CheckBox chkUPCE;
-        private System.Windows.Forms.CheckBox chkUPCA;
-        private System.Windows.Forms.CheckBox chkITF;
-        private System.Windows.Forms.CheckBox chkCodabar;
-        private System.Windows.Forms.CheckBox chkCode93;
-        private System.Windows.Forms.CheckBox chkCode128;
-        private System.Windows.Forms.CheckBox chkCode39;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbMaximumNum;
         private System.Windows.Forms.TextBox tbResults;
@@ -450,6 +470,19 @@
         private System.Windows.Forms.PictureBox picboxFirst;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox imageViewer;
+        private System.Windows.Forms.GroupBox gbBarcodeType;
+        private System.Windows.Forms.CheckBox chkQRCode;
+        private System.Windows.Forms.CheckBox chkIndustrial25;
+        private System.Windows.Forms.Button btnSelectAll;
+        private System.Windows.Forms.CheckBox chkEAN8;
+        private System.Windows.Forms.CheckBox chkEAN13;
+        private System.Windows.Forms.CheckBox chkUPCE;
+        private System.Windows.Forms.CheckBox chkUPCA;
+        private System.Windows.Forms.CheckBox chkITF;
+        private System.Windows.Forms.CheckBox chkCodabar;
+        private System.Windows.Forms.CheckBox chkCode93;
+        private System.Windows.Forms.CheckBox chkCode128;
+        private System.Windows.Forms.CheckBox chkCode39;
     }
 }
 

@@ -6,8 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Dynamsoft.Barcode;
-using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace BarcodeReaderDemo_CSharp
 {
@@ -15,12 +15,15 @@ namespace BarcodeReaderDemo_CSharp
     {
 
         private bool m_bFitWindow = false;
-        private List<Image> m_data = new List<Image>();
-        private Dictionary<Image, Image> m_results = new Dictionary<Image, Image>();
+        private Image m_data = null;
+        private int iPageCount = 0;
+        private List<int[]> m_results = new List<int[]>();
+        private BarcodeResult[] m_barcodes = null;
         private int m_index = -1;
         private string filePath = null;
         private String lastOpenedDirectory = Application.ExecutablePath;
-        private int iCheckedFormatCount = 9;
+        private const int iFormatCount = 11;
+        private int iCheckedFormatCount = iFormatCount;
 
         public bool FitWindow
         {
@@ -58,10 +61,10 @@ namespace BarcodeReaderDemo_CSharp
             }
             set
             {
-                if (value >= 0 && value < m_data.Count && m_index != value)
+                if (value >= 0 && value < iPageCount && m_index != value)
                 {
                     m_index = value;
-                    tbxCurrentImageIndex.Text = (value + 1).ToString();                  
+                    tbxCurrentImageIndex.Text = (value + 1).ToString();
                 }
                 SetImageViewerImage();
             }
@@ -85,7 +88,6 @@ namespace BarcodeReaderDemo_CSharp
         private void chkFitWindow_CheckedChanged(object sender, EventArgs e)
         {
             FitWindow = chkFitWindow.Checked;
-            //imageViewer.FitWindow = chkFitWindow.Checked;
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
@@ -110,79 +112,76 @@ namespace BarcodeReaderDemo_CSharp
                 btnSelectAll.Text = "Select All";
         }
 
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
+        public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
+
+        Bitmap Clone(Bitmap img, PixelFormat format)
+        {
+            Bitmap bmp = null;
+            BitmapData data = null;
+            BitmapData data2 = null;
+            try
+            {
+                data = img.LockBits(new Rectangle(0, 0, img.Width, img.Height), ImageLockMode.ReadOnly, format);
+                int len = data.Stride * img.Height;
+                bmp = new Bitmap(img.Width, img.Height, format);
+                data2 = bmp.LockBits(new Rectangle(0, 0, img.Width, img.Height), ImageLockMode.ReadWrite, format);
+                CopyMemory(data2.Scan0, data.Scan0, (uint)len);
+                img.UnlockBits(data);
+                bmp.UnlockBits(data2);
+                data = null;
+                data2 = null;
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (data != null)
+                    img.UnlockBits(data);
+                if (data2 != null)
+                    bmp.UnlockBits(data2);
+            }
+
+            return bmp;
+        }
+
         private void btnOpenImage_Click(object sender, EventArgs e)
         {
             try
             {
                 OpenFileDialog dlg = new OpenFileDialog();
-                dlg.Filter = "All Supported Images(*.BMP,*.PNG,*.JPEG,*.JPG,*.JPE,*.JFIF,*.TIF,*.TIFF)|*.BMP;*.PNG;*.JPEG;*.JPG;*.JPE;*.JFIF;*.TIF;*.TIFF|JPEG|*.JPG;*.JPEG;*.JPE;*.JFIF|BMP|*.BMP|PNG|*.PNG|TIFF|*.TIF;*.TIFF";
-                //dlg.Multiselect = true;
+                dlg.Filter = "All Supported Images(*.BMP,*.PNG,*.JPEG,*.JPG,*.JPE,*.JFIF,*.TIF,*.TIFF,*.GIF)|*.BMP;*.PNG;*.JPEG;*.JPG;*.JPE;*.JFIF;*.TIF;*.TIFF;*.GIF|JPEG|*.JPG;*.JPEG;*.JPE;*.JFIF|BMP|*.BMP|PNG|*.PNG|TIFF|*.TIF;*.TIFF|GIF|*.GIF";
                 dlg.InitialDirectory = lastOpenedDirectory;
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     lastOpenedDirectory = System.IO.Directory.GetParent(dlg.FileName).FullName;
-                    for (int i = 0; i < m_data.Count; i++)
-                        if (m_data[i] != null)
-                        {
-                            if (m_results.ContainsKey(m_data[i]) && m_results[m_data[i]] != null)
-                                m_results[m_data[i]].Dispose();
-                            m_data[i].Dispose();
-                        }
-                    m_data.Clear();
+                    if (m_data != null)
+                    {
+                        m_data.Dispose();
+                        m_data = null;
+                        iPageCount = 0;
+                    }
                     m_results.Clear();
                     tbResults.Clear();
 
-                    //foreach (string file in dlg.FileNames)
-                    //{
-                    filePath = dlg.FileName;
-                    Image img = null;
-                    try
-                    {
-                        img = Image.FromFile(filePath);
-                        Guid frameGuid = img.FrameDimensionsList[0];
-                        FrameDimension demension = new FrameDimension(frameGuid);
-                        int pageCount = img.GetFrameCount(demension);
-                        System.Collections.ArrayList lastExceptionalIndice = new System.Collections.ArrayList(pageCount);
-                        for (int i = 0; i < pageCount; i++)
-                        {
-                            try
-                            {
-                                img.SelectActiveFrame(demension, i);
-                            }
-                            catch (Exception exp)
-                            {
-                                img.Dispose();
-                                img = Image.FromFile(filePath);
-                                if (!lastExceptionalIndice.Contains(i))
-                                {
-                                    lastExceptionalIndice.Add(i);
-                                    if (i > 0)
-                                    {
-                                        i--;
-                                        if (m_data[i] != null)
-                                            m_data[i].Dispose();
-                                        m_data.RemoveAt(i);
-                                    }
-                                }
-                                img.SelectActiveFrame(demension, i);
-                            }
-                            m_data.Add(new Bitmap(img));
-                        }
+                    this.Text = dlg.FileName;
 
-                        img.Dispose();
-                        img = null;
-                    }
-                    finally
+                    filePath = dlg.FileName;
+
+                    m_data = Image.FromFile(filePath);
+                    if (m_data.RawFormat.Equals(ImageFormat.Gif))
+                        iPageCount = 1;
+                    else
                     {
-                        if (img != null)
-                            img.Dispose();
+                        iPageCount = m_data.GetFrameCount(new FrameDimension(m_data.FrameDimensionsList[0]));
                     }
-                    //}
-                    if (m_data.Count > 0 && iCheckedFormatCount > 0)
+
+                    if (iPageCount > 0 && iCheckedFormatCount > 0)
                         btnRead.Enabled = true;
-                    CurrentIndex = m_data.Count - 1;
-                    tbxTotalImageNum.Text = m_data.Count.ToString();
-                    if (m_data.Count > 1)
+                    CurrentIndex = iPageCount - 1;
+                    tbxTotalImageNum.Text = iPageCount.ToString();
+                    if (iPageCount > 1)
                     {
                         EnableControls(picboxFirst);
                         EnableControls(picboxPrevious);
@@ -206,16 +205,72 @@ namespace BarcodeReaderDemo_CSharp
 
         private void SetImageViewerImage()
         {
-            if (m_results.ContainsKey(m_data[m_index]) && m_results[m_data[m_index]] != null)
-                imageViewer.Image = m_results[m_data[m_index]];
-            else
-                imageViewer.Image = m_data[m_index];
-            //if (imageViewer.Image != null)
-            //    imageViewer.Image.Dispose();
-            //imageViewer.Image = null;
+            if (imageViewer.Image != null)
+            {
+                Image img = imageViewer.Image;
+                imageViewer.Image = null;
+                img.Dispose();
+            }
 
-            //if (img != null)
-            //    imageViewer.Image = (Image)img.Clone();
+            if (m_index >= 0 && m_index < iPageCount)
+            {
+                Bitmap bmp = null;
+                if (iPageCount > 1)
+                {
+                    Bitmap tempBmp = (Bitmap)m_data.Clone();
+                    tempBmp.SelectActiveFrame(FrameDimension.Page, m_index);
+                    PixelFormat format = tempBmp.PixelFormat;
+                    if (((((uint)tempBmp.PixelFormat) >> 8) & 255) < 24)
+                        format = PixelFormat.Format24bppRgb;
+                    bmp = Clone(tempBmp, format);
+                    tempBmp.Dispose();
+                }
+                else
+                {
+                    PixelFormat format = m_data.PixelFormat;
+                    if (((((uint)m_data.PixelFormat) >> 8) & 255) < 24)
+                        format = PixelFormat.Format24bppRgb;
+                    bmp = Clone((Bitmap)m_data, format);
+                }
+
+                if (bmp != null)
+                {
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        if (m_index < m_results.Count)
+                        {
+                            int[] barcodeResults = m_results[m_index];
+                            if (barcodeResults != null && barcodeResults.Length > 0)
+                            {
+                                float fsize = bmp.Width / 64f;
+                                if (fsize < 12)
+                                    fsize = 12;
+                                Pen pen = new Pen(Color.Red, 1 > fsize / 12 ? 1 : fsize / 12);
+                                Brush textBrush = new SolidBrush(Color.Blue);
+                                Font textFont = new Font("Times New Roman", fsize, FontStyle.Bold);
+                                for (int i = barcodeResults.Length - 1; i >= 0; i--)
+                                {
+                                    BarcodeResult barcodeResult = m_barcodes[barcodeResults[i]];
+                                    if (barcodeResult != null)
+                                    {
+                                        Rectangle rect = barcodeResult.BoundingRect;
+                                        g.DrawRectangle(pen, rect);
+                                        string strText = "[" + (barcodeResults[i] + 1) + "] {" + barcodeResult.BarcodeText + "}";
+                                        SizeF size = g.MeasureString(strText, textFont);
+                                        int iHeight = ((int)size.Height + 1);
+                                        g.DrawString(strText, textFont, textBrush, new Rectangle(rect.Left, rect.Top - iHeight < 0 ? 0 : rect.Top - iHeight, 0, iHeight), new StringFormat(StringFormatFlags.NoClip | StringFormatFlags.NoWrap));
+                                    }
+                                }
+                                pen.Dispose();
+                                textBrush.Dispose();
+                                textFont.Dispose();
+                            }
+                        }
+
+                        imageViewer.Image = bmp;
+                    }
+                }
+            }
         }
 
         private BarcodeFormat GetFormats()
@@ -266,7 +321,17 @@ namespace BarcodeReaderDemo_CSharp
                     formats = BarcodeFormat.EAN_13;
                 else
                     formats = formats | BarcodeFormat.EAN_13;
-            return !formats.HasValue ? BarcodeFormat.OneD : formats.Value;
+            if (chkIndustrial25.Checked)
+                if (!formats.HasValue)
+                    formats = BarcodeFormat.INDUSTRIAL_25;
+                else
+                    formats = formats | BarcodeFormat.INDUSTRIAL_25;
+            if (chkQRCode.Checked)
+                if (!formats.HasValue)
+                    formats = BarcodeFormat.QR_CODE;
+                else
+                    formats = formats | BarcodeFormat.QR_CODE;
+            return !formats.HasValue ? BarcodeFormat.OneD | BarcodeFormat.QR_CODE : formats.Value;
         }
 
         private void btnRead_Click(object sender, EventArgs e)
@@ -283,7 +348,7 @@ namespace BarcodeReaderDemo_CSharp
                     reader.ReaderOptions = ro;
                     reader.LicenseKeys = "<Input your license key here>";
                     DateTime beforeRead = DateTime.Now;
-                    BarcodeResult[] barcodes = reader.DecodeFile(filePath);//, rect);             
+                    BarcodeResult[] barcodes = reader.DecodeFile(filePath);           
                     DateTime afterRead = DateTime.Now;
                     int timeElapsed = (afterRead - beforeRead).Milliseconds;
                     ShowBarcodeResults(barcodes, timeElapsed);
@@ -302,19 +367,12 @@ namespace BarcodeReaderDemo_CSharp
         private void ShowBarcodeResults(BarcodeResult[] barcodeResults, float timeElapsed)
         {
             tbResults.Clear();
-            List<Image> imgs = new List<Image>(m_results.Keys);
-            foreach (Image img in imgs)
-            {
-                if (m_results[img] != null)
-                {
-                    m_results[img].Dispose();
-                    m_results[img] = null;
-                }
-            }
+            m_results.Clear();
+            m_barcodes = barcodeResults;
 
             if (barcodeResults != null && barcodeResults.Length > 0)
             {
-                tbResults.AppendText(String.Format("Total barcode(s) found: {0}. Total time spent: {1} seconds\r\n", barcodeResults.Length, (timeElapsed / 1000)));
+                tbResults.AppendText(String.Format("Total barcode(s) found: {0}. Total time spent: {1} seconds\r\n\r\n", barcodeResults.Length, (timeElapsed / 1000)));
                 for (int i = 0; i < barcodeResults.Length; i++)
                 {
                     tbResults.AppendText(String.Format("  Barcode {0}:\r\n", i + 1));
@@ -324,59 +382,53 @@ namespace BarcodeReaderDemo_CSharp
                     tbResults.AppendText(String.Format("    Region: {{Left: {0}, Top: {1}, Width: {2}, Height: {3}}}\r\n", barcodeResults[i].BoundingRect.Left, barcodeResults[i].BoundingRect.Top, barcodeResults[i].BoundingRect.Width, barcodeResults[i].BoundingRect.Height));
                     tbResults.AppendText("\r\n");
                 }
+                tbResults.SelectionStart = 0;
+                tbResults.ScrollToCaret();
 
-                Pen pen = new Pen(Color.Red, 1);
-                Brush textBrush = new SolidBrush(Color.Blue);
-                Image img = null;
-                Graphics g = null;
-                int index = -1;
-                for (int i = barcodeResults.Length - 1; i >= 0; i--)
+                int iLastPageNumber = int.MinValue + 10;
+                int iStartIndex = barcodeResults.Length - 1;
+                for (int i = 0; i < iPageCount; i++)
+                    m_results.Add(null);
+                for (int i = iStartIndex; i >= 0; i--)
                 {
                     if (barcodeResults[i] != null)
                     {
-                        if (barcodeResults[i].PageNumber != (index+1))
+                        if (barcodeResults[i].PageNumber != iLastPageNumber)
                         {
-                            if (g != null)
-                                g.Dispose();
-                            if (img != null && index >= 0 && index < m_data.Count)
-                                if (m_results.ContainsKey(m_data[index]))
+                            if (i != iStartIndex)
+                            {
+                                int iEnd = i > iStartIndex ? i - 1 : i + 1;
+                                int iStart = iEnd > iStartIndex ? iStartIndex : iEnd;
+                                iEnd = iEnd > iStartIndex ? iEnd : iStartIndex;
+                                int[] resultsOnePage = new int[iEnd - iStart + 1];
+                                for (int k = iStart; k <= iEnd; k++)
                                 {
-                                    if (m_results[m_data[index]] != null)
-                                        m_results[m_data[index]].Dispose();
-                                    m_results[m_data[index]] = img;
+                                    resultsOnePage[k - iStart] = k;
                                 }
-                                else
-                                    m_results.Add(m_data[index], img);
-
-                            index = barcodeResults[i].PageNumber-1;
-                            img = (Image)m_data[index].Clone();
-                            g = Graphics.FromImage(img);
+                                m_results[iLastPageNumber-1] = resultsOnePage;
+                            }
+                            iStartIndex = i;
+                            iLastPageNumber = barcodeResults[i].PageNumber;
                         }
-                        Rectangle rect = barcodeResults[i].BoundingRect;
-                        g.DrawRectangle(pen, rect);
-                        Font textFont = SystemFonts.DefaultFont;
-                        int iHeight = textFont.Height * 3 / 2;
-                        g.DrawString("[" + i + "] {" + barcodeResults[i].BarcodeText + "}", textFont, textBrush, new Rectangle(rect.Left, rect.Top - iHeight < 0 ? 0 : rect.Top - iHeight, 0, iHeight), new StringFormat(StringFormatFlags.NoClip | StringFormatFlags.NoWrap));
+
+                        if (i == 0)
+                        {
+                            int iStart = i > iStartIndex ? iStartIndex : i;
+                            int iEnd = i > iStartIndex ? i : iStartIndex;
+                            int[] resultsOnePage = new int[iEnd - iStart + 1];
+                            for (int k = iStart; k <= iEnd; k++)
+                            {
+                                resultsOnePage[k - iStart] = k;
+                            }
+                            m_results[iLastPageNumber-1] = resultsOnePage;
+                        }
                     }
                 }
-                pen.Dispose();
-                textBrush.Dispose();
-                if (g != null)
-                    g.Dispose();
-                if (img != null && index >= 0 && index < m_data.Count)
-                    if (m_results.ContainsKey(m_data[index]))
-                    {
-                        if (m_results[m_data[index]] != null)
-                            m_results[m_data[index]].Dispose();
-                        m_results[m_data[index]] = img;
-                    }
-                    else
-                        m_results.Add(m_data[index], img);
-
-                SetImageViewerImage();
             }
             else
                 tbResults.AppendText(String.Format("No barcode found. Total time spent: {0} seconds\r\n", (timeElapsed / 1000)));
+
+            SetImageViewerImage();
         }
 
         private void tbMaximumNum_KeyPress(object sender, KeyPressEventArgs e)
@@ -486,7 +538,7 @@ namespace BarcodeReaderDemo_CSharp
         {
             if (picboxLast.Enabled)
             {
-                CurrentIndex = m_data.Count - 1;
+                CurrentIndex = iPageCount - 1;
                 DisableControls(picboxLast);
                 DisableControls(picboxNext);
                 EnableControls(picboxPrevious);
@@ -514,7 +566,7 @@ namespace BarcodeReaderDemo_CSharp
             CurrentIndex++;
             if (picboxNext.Enabled)
             {
-                if (CurrentIndex == m_data.Count - 1)
+                if (CurrentIndex == iPageCount - 1)
                 {
                     DisableControls(picboxLast);
                     DisableControls(picboxNext);
@@ -534,14 +586,14 @@ namespace BarcodeReaderDemo_CSharp
             else
                 iCheckedFormatCount--;
 
-            if (m_data.Count > 0 && iCheckedFormatCount > 0)
+            if (iPageCount > 0 && iCheckedFormatCount > 0)
                 btnRead.Enabled = true;
             else
             {
                 btnRead.Enabled = false;
             }
 
-            if (iCheckedFormatCount < 9)
+            if (iCheckedFormatCount < iFormatCount)
                 btnSelectAll.Text = "Select All";
             else
                 btnSelectAll.Text = "Unselect All";

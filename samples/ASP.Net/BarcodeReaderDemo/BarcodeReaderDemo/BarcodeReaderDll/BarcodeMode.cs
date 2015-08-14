@@ -76,7 +76,7 @@ namespace BarcodeDLL
                 string strFileName = BarcodeAccess.GetNextFileIndex(strImgID, strSessionID);
                 string strFullPath = BarcodeAccess.GetUploadFolder() + System.IO.Path.DirectorySeparatorChar + strSessionID + System.IO.Path.DirectorySeparatorChar + strFileName;
 
-                _bitmap.Save(strFullPath, System.Drawing.Imaging.ImageFormat.Bmp);
+                _bitmap.Save(strFullPath, GetImageFormat(strImgID));
 
                 if (_bitmap != null)
                     _bitmap.Dispose();
@@ -89,6 +89,30 @@ namespace BarcodeDLL
                 else
                     throw;
             }
+        }
+
+        public static System.Drawing.Imaging.ImageFormat GetImageFormat(string strImgID)
+        {
+            System.Drawing.Imaging.ImageFormat format = System.Drawing.Imaging.ImageFormat.Bmp;
+            if (strImgID != null)
+            {
+                string strExtern = strImgID.Substring(strImgID.LastIndexOf('.') + 1).ToLower();
+                switch (strExtern)
+                {
+                    case "bmp": break;
+                    case "jpg":
+                    case "jpeg":
+                    case "jpe": format = System.Drawing.Imaging.ImageFormat.Jpeg; break;
+                    case "png": format = System.Drawing.Imaging.ImageFormat.Png; break;
+                    case "gif": format = System.Drawing.Imaging.ImageFormat.Gif; break;
+                    case "tif":
+                    case "tiff": format = System.Drawing.Imaging.ImageFormat.Tiff; break;
+                    case "icon":
+                    case "ico": format = System.Drawing.Imaging.ImageFormat.Icon; break;
+                    default: break;
+                }
+            }
+            return format;
         }
 
         public static void DeleteFolder(string strSessionID)
@@ -128,7 +152,10 @@ namespace BarcodeDLL
                 using (Graphics g = Graphics.FromImage(_bitmap))
                 {
                     g.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height), 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
-                    using (Font font = new Font("Times New Roman", 12, FontStyle.Bold))
+                    float fsize = bitmap.Width / 80f;
+                    if (fsize < 12)
+                        fsize = 12;
+                    using (Font font = new Font("Times New Roman", fsize, FontStyle.Bold))
                     {
                         int i = 1;
                         foreach (BarcodeResult Item in listResult)
@@ -176,6 +203,7 @@ namespace BarcodeDLL
             options.BarcodeFormats = (BarcodeFormat)format;
 
             reader.ReaderOptions = options;
+            reader.LicenseKeys = "<input barcode reader license here>";
             return reader.DecodeBitmap(bitmap);
 
         }
@@ -198,7 +226,7 @@ namespace BarcodeDLL
             string strFileName = BarcodeAccess.GetNextFileIndex(strImgID, strSessionID);
             string strFullPath = BarcodeAccess.GetUploadFolder() + System.IO.Path.DirectorySeparatorChar + strSessionID + System.IO.Path.DirectorySeparatorChar + strFileName;
 
-            _bitmap.Save(strFullPath, System.Drawing.Imaging.ImageFormat.Bmp);
+            _bitmap.Save(strFullPath, GetImageFormat(strImgID));
             if (_bitmap != null)
             {
                 _bitmap.Dispose();

@@ -48,10 +48,10 @@ JNIEXPORT jint JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1DecodeBufferRect
 
 /*
  * Class:     com_dynamsoft_barcode_JBarcode
- * Method:    GetErrorString
+ * Method:    DBR_GetErrorString
  * Signature: (I)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_dynamsoft_barcode_JBarcode_GetErrorString
+JNIEXPORT jstring JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1GetErrorString
   (JNIEnv *, jclass, jint);
 
 

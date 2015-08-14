@@ -2,17 +2,17 @@ VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmMain 
    Caption         =   "Barcode Reader Demo"
-   ClientHeight    =   8325
+   ClientHeight    =   8910
    ClientLeft      =   60
    ClientTop       =   345
    ClientWidth     =   8205
    LinkTopic       =   "Form1"
-   ScaleHeight     =   8325
+   ScaleHeight     =   8910
    ScaleWidth      =   8205
    StartUpPosition =   3  'Windows Default
    Begin MSComDlg.CommonDialog cdOpenFileDlg 
       Left            =   0
-      Top             =   7920
+      Top             =   8400
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
@@ -20,16 +20,16 @@ Begin VB.Form frmMain
    Begin VB.ListBox lbResults 
       Height          =   3570
       Left            =   360
-      TabIndex        =   17
-      Top             =   3960
+      TabIndex        =   15
+      Top             =   4680
       Width           =   7575
    End
    Begin VB.CommandButton btnReadBarcode 
       Caption         =   "Read Barcodes"
       Height          =   495
       Left            =   360
-      TabIndex        =   16
-      Top             =   3240
+      TabIndex        =   14
+      Top             =   3960
       Width           =   1455
    End
    Begin VB.TextBox tbMaxNum 
@@ -44,9 +44,9 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   375
       Left            =   1920
-      TabIndex        =   15
+      TabIndex        =   13
       Text            =   "100"
-      Top             =   2640
+      Top             =   3360
       Width           =   6015
    End
    Begin VB.CommandButton btnBrowse 
@@ -66,30 +66,66 @@ Begin VB.Form frmMain
    End
    Begin VB.Frame frmTypes 
       Caption         =   "Barcode Types"
-      Height          =   1455
+      Height          =   2055
       Left            =   240
       TabIndex        =   3
       Top             =   960
       Width           =   7695
+      Begin VB.CheckBox cbQRCode 
+         Caption         =   "QRCode"
+         Height          =   255
+         Left            =   480
+         TabIndex        =   19
+         Top             =   1440
+         Value           =   1  'Checked
+         Width           =   1215
+      End
+      Begin VB.CheckBox cbIND 
+         Caption         =   "Industrial 2 of 5"
+         Height          =   375
+         Left            =   3240
+         TabIndex        =   18
+         Top             =   840
+         Value           =   1  'Checked
+         Width           =   1455
+      End
+      Begin VB.CheckBox cbCodabar 
+         Caption         =   "Codabar"
+         Height          =   375
+         Left            =   1800
+         TabIndex        =   17
+         Top             =   840
+         Value           =   1  'Checked
+         Width           =   975
+      End
+      Begin VB.CheckBox cbEAN13 
+         Caption         =   "EAN13"
+         Height          =   375
+         Left            =   5040
+         TabIndex        =   16
+         Top             =   840
+         Value           =   1  'Checked
+         Width           =   855
+      End
       Begin VB.CommandButton btnSelect 
          Caption         =   "Unselect All"
          Height          =   375
          Left            =   5880
-         TabIndex        =   13
-         Top             =   840
+         TabIndex        =   11
+         Top             =   1440
          Width           =   1335
       End
       Begin VB.CheckBox cbCode93 
-         Caption         =   "Code93"
+         Caption         =   "Code 93"
          Height          =   375
          Left            =   1800
          TabIndex        =   6
          Top             =   360
          Value           =   1  'Checked
-         Width           =   855
+         Width           =   975
       End
       Begin VB.CheckBox cbCode39 
-         Caption         =   "Code39"
+         Caption         =   "Code 39"
          Height          =   375
          Left            =   480
          TabIndex        =   4
@@ -98,28 +134,19 @@ Begin VB.Form frmMain
          Width           =   975
       End
       Begin VB.CheckBox cbITF 
-         Caption         =   "ITF"
+         Caption         =   "Interleaved 2 of 5"
          Height          =   375
          Left            =   3240
-         TabIndex        =   12
+         TabIndex        =   10
          Top             =   360
          Value           =   1  'Checked
-         Width           =   855
-      End
-      Begin VB.CheckBox cbEAN13 
-         Caption         =   "EAN13"
-         Height          =   375
-         Left            =   3240
-         TabIndex        =   11
-         Top             =   840
-         Value           =   1  'Checked
-         Width           =   855
+         Width           =   1695
       End
       Begin VB.CheckBox cbEAN8 
          Caption         =   "EAN8"
          Height          =   375
-         Left            =   4560
-         TabIndex        =   10
+         Left            =   5040
+         TabIndex        =   9
          Top             =   360
          Value           =   1  'Checked
          Width           =   855
@@ -127,8 +154,8 @@ Begin VB.Form frmMain
       Begin VB.CheckBox cbUPCA 
          Caption         =   "UPCA"
          Height          =   375
-         Left            =   4560
-         TabIndex        =   9
+         Left            =   6360
+         TabIndex        =   8
          Top             =   840
          Value           =   1  'Checked
          Width           =   855
@@ -136,37 +163,28 @@ Begin VB.Form frmMain
       Begin VB.CheckBox cbUPCE 
          Caption         =   "UPCE"
          Height          =   375
-         Left            =   5880
-         TabIndex        =   8
+         Left            =   6360
+         TabIndex        =   7
          Top             =   360
          Value           =   1  'Checked
          Width           =   855
       End
-      Begin VB.CheckBox cbCodabar 
-         Caption         =   "Codabar"
-         Height          =   375
-         Left            =   1800
-         TabIndex        =   7
-         Top             =   840
-         Value           =   1  'Checked
-         Width           =   975
-      End
       Begin VB.CheckBox cbCode128 
-         Caption         =   "Code128"
+         Caption         =   "Code 128"
          Height          =   375
          Left            =   480
          TabIndex        =   5
          Top             =   840
          Value           =   1  'Checked
-         Width           =   975
+         Width           =   1095
       End
    End
    Begin VB.Label Label2 
       Caption         =   "Maximum Number:"
       Height          =   375
       Left            =   360
-      TabIndex        =   14
-      Top             =   2640
+      TabIndex        =   12
+      Top             =   3360
       Width           =   1455
    End
    Begin VB.Label Label1 
@@ -190,8 +208,8 @@ Private Sub btnBrowse_Click()
     On Error GoTo ErrLabel
     
     cdOpenFileDlg.CancelError = True
-    cdOpenFileDlg.Filter = "BMP(*.bmp)|*.bmp|JPEG(*.jpg;*.jpeg)|*.jpg;*.jpeg|PNG(*.png)|*.png|TIFF(*.tif;*.tiff)|*.tif;*.tiff|All Files|*.*"
-    cdOpenFileDlg.FilterIndex = 5
+    cdOpenFileDlg.Filter = "BMP(*.bmp)|*.bmp|JPEG(*.jpg;*.jpeg)|*.jpg;*.jpeg|PNG(*.png)|*.png|TIFF(*.tif;*.tiff)|*.tif;*.tiff|GIF(*.gif)|*.gif|All Files|*.*"
+    cdOpenFileDlg.FilterIndex = 6
     cdOpenFileDlg.ShowOpen
     
     tbFileName.Text = cdOpenFileDlg.FileName
@@ -206,6 +224,7 @@ Private Function GetSelectedBarcodeTypes() As Variant
     Dim oFormat As New BarcodeFormat
     Dim vFormat As Variant
     vFormat = 0
+    
     
     If cbCode39.Value = Checked Then
         vFormat = vFormat Or oFormat.CODE_39
@@ -241,6 +260,14 @@ Private Function GetSelectedBarcodeTypes() As Variant
    
     If cbUPCE.Value = Checked Then
         vFormat = vFormat Or oFormat.UPC_E
+    End If
+    
+    If cbIND.Value = Checked Then
+        vFormat = vFormat Or oFormat.INDUSTRIAL_25
+    End If
+    
+    If cbQRCode.Value = Checked Then
+        vFormat = vFormat Or oFormat.QR_CODE
     End If
     
     GetSelectedBarcodeTypes = vFormat
@@ -328,6 +355,8 @@ Private Sub btnSelect_Click()
         cbEAN8.Value = Checked
         cbUPCA.Value = Checked
         cbUPCE.Value = Checked
+        cbIND.Value = Checked
+        cbQRCode.Value = Checked
     Else
         btnSelect.Caption = "Select All"
         bUnselectFlag = False
@@ -340,8 +369,14 @@ Private Sub btnSelect_Click()
         cbEAN8.Value = Unchecked
         cbUPCA.Value = Unchecked
         cbUPCE.Value = Unchecked
+        cbIND.Value = Unchecked
+        cbQRCode.Value = Unchecked
     End If
     
+    DisableOrEnableReadButton
+End Sub
+
+Private Sub DisableOrEnableReadButton()
     If GetSelectedBarcodeTypes = 0 Then
         btnReadBarcode.Enabled = False
     Else
@@ -350,76 +385,47 @@ Private Sub btnSelect_Click()
 End Sub
 
 Private Sub cbCodabar_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbCode128_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbCode39_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
-    
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbCode93_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbEAN13_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbEAN8_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
+End Sub
+
+Private Sub cbIND_Click()
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbITF_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
+End Sub
+
+Private Sub cbQRCode_Click()
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbUPCA_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub cbUPCE_Click()
-    If GetSelectedBarcodeTypes = 0 Then
-        btnReadBarcode.Enabled = False
-    Else
-        btnReadBarcode.Enabled = True
-    End If
+    DisableOrEnableReadButton
 End Sub
 
 Private Sub Form_Load()

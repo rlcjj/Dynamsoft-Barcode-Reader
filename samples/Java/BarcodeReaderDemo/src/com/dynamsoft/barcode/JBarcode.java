@@ -75,6 +75,6 @@ public class JBarcode {
 	);
 
 
-    public native String GetErrorString(int iErrorCode);
+    public native static String DBR_GetErrorString(int iErrorCode);
 
 }

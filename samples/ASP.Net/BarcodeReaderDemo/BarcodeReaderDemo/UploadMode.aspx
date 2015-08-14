@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
-<head runat="server">
-    <title></title>
+     <head runat="server">
+     <title></title>
+     <link rel="stylesheet" href="Css/basis.css?ver=2.0"/>
      <link type="text/css" rel="Stylesheet" href="Css/style.css" />
+     
      <script type="text/javascript" language="javascript" src="Scripts/kissy-min.js"></script>
      <script type="text/javascript" language="javascript" src="Scripts/OnlineDemoAjax.js"></script>
      <script type="text/javascript" language="javascript" src="Scripts/DemoCommon.js"></script>
-    <script type="text/javascript">
+     <script type="text/javascript" language="javascript" src="Scripts/jquery-1.11.2.js"></script>
+     <script type="text/javascript">
      function CheckLocalPath() {
             var objImgURL = document.getElementById("<%=upLoadFile.ClientID%>");
             return CheckLocalPathInner(objImgURL);
@@ -94,41 +97,55 @@
              ClearUpLoadFile();
          }
      </script>
-</head>
-<body oncontextmenu=self.event.returnValue=false>
-    <form id="form1" runat="server">
-     <div class="body_Broad_width" style="background-color:#ffffff; border:0;">
-      <table style="width: 94%; float: left; margin-left: 0px; top:5px;background-color:#ffffff; border:0;">
-        <tr>
-            <td style="text-align: left;padding:0px; height:28px; font-weight:bold">
-                Load&nbsp;image&nbsp;from&nbsp;local&nbsp;disk:
-            </td>
-             <td>
-                <div style="width:638px;"><asp:FileUpload CssClass="ImgLocalPath"  ID="upLoadFile"  size="115%" 
-                        style="width:645px;  filter:alpha(opacity=0);-moz-opacity:0;opacity:0;" runat="server"/></div>
-                <div style="width:638px; float:left;position:relative;">
-                <asp:TextBox ID="txtUploadFileName" CssClass="ImgURL" ReadOnly=true runat="server"></asp:TextBox>
-                <img src="Images/Browse.png" id="btnUploadFile" style="position:absolute;cursor:pointer;margin-left:5px;margin-top:0px;float:left;" /></div>
-                <div style="float:left; width:80px; margin-left:5px;*margin-left:6px;margin-left:6px\9; margin-top:0px;"><img src="Images/OpenImage.png" id="Img1" style="cursor:pointer;margin-left:0px; float:left;" onclick="javascript:document.getElementById('AddImage').click();"/></div>                 
-                <div style="display:none;"><input id="AddImage" type="submit" onclick="return ClickUploadImage();" style="display:none;height:22px; width:1px;margin-left:0px; float:left;" value="Open Image" name="AddImage"></div>
-            </td>
-        </tr>
-        
-        <tr >
-            <td style="text-align: left;padding:0px;font-weight:bold">
-                Copy image from remote url:
-            </td>
-            <td>
-                <div style="width:610px; height:30px;float:left;position:relative;">
-                <asp:TextBox ID="txtImgURL" CssClass="ImgURL" runat="server"></asp:TextBox>
-                <img src="Images/open image from URL.png" id="GetFileFromURL" style="position:absolute;cursor:pointer;margin-left:5px; float:left;margin-top:0px;" onclick="javascript:document.getElementById('btnGetFileFromURL').click();"/></div>
-                <div style="display:none;"><input id="btnGetFileFromURL" type="submit" onclick="return ClickCopyFromURL();" style="display:none;height:22px; width:1px; margin-left:0px;"  value="Open Image From URL" name="btnUploadFile">
-                </div>
-            </td>
-        </tr>                  
-    </table>
-    </div>
-    <asp:HiddenField ID="hide_State" Value= "0" runat="server" />
-    </form>
+     </head>
+     <body oncontextmenu=self.event.returnValue=false>
+     <ul id="image-menu">
+       <li class="clickon local-img">Local Images</li>
+       <li class="download-img">Download Images</li>
+     </ul>
+     <form id="form1" runat="server">
+       <div id="local-image">
+         <div class="img-title"> File Path: </div>
+         <div>
+           <asp:FileUpload CssClass="ImgLocalPath"  ID="upLoadFile"  size="115%" 
+                        style="width:645px;  filter:alpha(opacity=0);-moz-opacity:0;opacity:0;" runat="server"/>
+         </div>
+         <asp:TextBox ID="txtUploadFileName" CssClass="ImgURL" ReadOnly=true runat="server"></asp:TextBox>
+         
+         <input type="button" id="btnUploadFile" value=""/>
+         
+         <input type="button" id="Img1" value="" onclick="javascript:document.getElementById('AddImage').click();" />
+         <div style="display:none;">
+           <input id="AddImage" type="submit" onclick="return ClickUploadImage();" style="display:none;height:22px; width:1px;margin-left:0px; float:left;" value="Open Image" name="AddImage">
+         </div>
+       </div>
+       
+       <div id="download-image" class="hidden">
+         <div class="img-title">Remote Image URL: </div>
+         <asp:TextBox ID="txtImgURL" CssClass="ImgURL" runat="server"></asp:TextBox>
+         <input type="button" value="" id="GetFileFromURL" onclick="javascript:document.getElementById('btnGetFileFromURL').click();" />
+         <div style="display:none;">
+           <input id="btnGetFileFromURL" type="submit" onclick="return ClickCopyFromURL();" style="display:none;height:22px; width:1px; margin-left:0px;"  value="Open Image From URL" name="btnUploadFile">
+         </div>
+       </div>
+       <asp:HiddenField ID="hide_State" Value= "0" runat="server" />
+     </form>
+<script type="text/javascript">
+ $("#image-menu li").click(function(){
+	 var liIndex=$(this).index();
+	 $(this).addClass("clickon");
+     $(this).siblings().removeClass("clickon");
+	 if(liIndex==0){
+		     $("#local-image").removeClass("hidden");
+		     $("#download-image").addClass("hidden");
+			 } else {
+		         $("#local-image").addClass("hidden");
+		         $("#download-image").removeClass("hidden");
+				 }
+	 
+	 });
+      
+</script>
+
 </body>
 </html>

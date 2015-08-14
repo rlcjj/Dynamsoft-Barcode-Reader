@@ -36,11 +36,23 @@ namespace BarcodeWeb
                     strReturnValue = this.GetImageSize(strFileName);
                     Response.Write(strReturnValue);
                 }
+                else if (strMethod == "EndSession")
+                {
+                    string sessionID = Ajaxfunctions.DecodeValueInXml(this.Request.Form["SessionID"]);
+                    EndSession(sessionID);
+                    Response.Write("Done");
+                }
             }
             else
             {
                 Response.Write("Error.");
             }
+        }
+
+        private void EndSession(string sessionID)
+        {
+            if (Session.SessionID.Equals(sessionID))
+                Session.Abandon();
         }
 
         private string DoBarcodeInner(string strImgID, Int64 iFormat, string strSessionID)

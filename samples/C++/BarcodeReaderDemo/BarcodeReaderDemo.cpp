@@ -27,7 +27,9 @@ static struct barcode_format Barcode_Formats[] =
 	{"UPC_E", UPC_E},
 	{"EAN_13", EAN_13},
 	{"EAN_8", EAN_8},
-	{"OneD", OneD}
+	{"INDUSTRIAL_25",INDUSTRIAL_25},
+	{"OneD", OneD},
+	{"QR_CODE", QR_CODE}
 };
 
 static struct barcode_format Barcode_Formats_Lowcase[] = 
@@ -41,7 +43,9 @@ static struct barcode_format Barcode_Formats_Lowcase[] =
 	{"upc_e", UPC_E},
 	{"ean_13", EAN_13},
 	{"ean_8", EAN_8},
-	{"oned", OneD}
+	{"industrial_25", INDUSTRIAL_25},
+	{"oned", OneD},
+	{"qr_code", QR_CODE}
 };
 __int64 GetFormat(const char * pstr)
 {
@@ -81,7 +85,7 @@ const char * GetFormatStr(__int64 format)
 void PrintHelp()
 {
 	printf("\r\nUsage: BarcodeReaderDemo_C++.exe [-f format] [-n number] ImageFilePath\r\n\r\n\
--f format: supported barcode formats include {CODE_39;CODE_128;CODE_93;CODABAR;ITF;UPC_A;UPC_E;EAN_13;EAN_8;OneD}.\r\n\r\n\
+-f format: supported barcode formats include {CODE_39;CODE_128;CODE_93;CODABAR;ITF;UPC_A;UPC_E;EAN_13;EAN_8;INDUSTRIAL_25;OneD;QR_CODE}.\r\n\r\n\
 -n number: maximum barcodes to read per page.\r\n\r\n\
 Press any key to continue . . .");
 	getch(); 
@@ -90,7 +94,7 @@ Press any key to continue . . .");
 int main(int argc, const char* argv[])
 {
 	// Parse command
-	__int64 llFormat = OneD;
+	__int64 llFormat = (OneD|QR_CODE);
 	const char * pszImageFile = NULL;
 	int iMaxCount = 0x7FFFFFFF;
 	int iIndex = 0;
@@ -170,7 +174,7 @@ int main(int argc, const char* argv[])
 	pszTemp = (char*)malloc(4096);
 	if (iRet != DBR_OK)
 	{
-		sprintf(pszTemp, "Failed to read barcode: %s\r\n", GetErrorString(iRet));
+		sprintf(pszTemp, "Failed to read barcode: %s\r\n", DBR_GetErrorString(iRet));
 		printf(pszTemp);
 		free(pszTemp);
 		return 1;

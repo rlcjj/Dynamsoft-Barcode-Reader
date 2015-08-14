@@ -17,7 +17,7 @@ public final class CommandLineRunner {
 	      return;
 	    }
 
-	    int iMaxCount = -1;
+	    int iMaxCount = Integer.MAX_VALUE;
 	    long lFormat = -1;
 	    String pszImageFile = null;
 		for (int iIndex = 0; iIndex < args.length; iIndex ++)
@@ -78,8 +78,8 @@ public final class CommandLineRunner {
 		tagBarcodeResultArray paryResults = new tagBarcodeResultArray();
 		
 		int iret = JBarcode.DBR_DecodeFile(pszImageFile, iMaxCount, lFormat, paryResults);
-		if(iret == -10003){
-			System.out.println("Invalid License.");
+		if(iret != 0){
+			System.out.println(JBarcode.DBR_GetErrorString(iret));
 			return;
 		}
 		
@@ -144,7 +144,7 @@ public final class CommandLineRunner {
 
 		System.out.println("Usage: java -jar BarcodeReaderDemo.jar [-f format] [-n number] ImageFilePath");
 		System.out.println();
-		System.out.println("-f format: supported barcode formats include {CODE_39;CODE_128;CODE_93;CODABAR;ITF;UPC_A;UPC_E;EAN_13;EAN_8;OneD}. ");
+		System.out.println("-f format: supported barcode formats include {CODE_39;CODE_128;CODE_93;CODABAR;ITF;UPC_A;UPC_E;EAN_13;EAN_8;INDUSTRIAL_25;OneD;QR_CODE}. ");
 		System.out.println();
 		System.out.println("-n number: maximum barcodes to read per page.");
 	}
@@ -180,6 +180,10 @@ public final class CommandLineRunner {
 				lFormat |= EnumBarCode.EAN_8;
 			else if (compareCmd(cmd, "ONED") == 0)
 				lFormat = EnumBarCode.OneD;
+			else if (compareCmd(cmd, "INDUSTRIAL_25") == 0)
+				lFormat = EnumBarCode.INDUSTRIAL_25;
+			else if(compareCmd(cmd, "QR_CODE") == 0)
+				lFormat = EnumBarCode.QR_CODE;
 			
 		}
 		return lFormat;
@@ -208,6 +212,10 @@ public final class CommandLineRunner {
 			return "EAN_13";
 		if (format == EnumBarCode.EAN_8)	
 			return "EAN_8";
+		if (format == EnumBarCode.INDUSTRIAL_25)
+			return "INDUSTRIAL_25";
+		if (format == EnumBarCode.QR_CODE)
+			return "QR_CODE";
 
 		return "Unknown";
 	}

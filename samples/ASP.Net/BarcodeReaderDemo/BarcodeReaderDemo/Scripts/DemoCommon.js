@@ -19,11 +19,11 @@ function showWaitDialog(waitDialogType) {
     }
 
     var ObjString = "<div class=\"D-dailog-body-Recognition\">";
-    ObjString += "<p>" + varInformation + "</p>";
-    ObjString += "<img src='Images/loading.gif'  style='width:160px; height:160px' /></div>";
+    ObjString += "<p style='font-size:15px;' >" + varInformation + "</p>";
+    ObjString += "<img src='Images/loading.gif'  style='width:160px; height:160px; margin-left:17px; margin-top:20px;' /></div>";
     document.getElementById("strBody").innerHTML = ObjString;
 
-    ShowWaitDialog(200, 232); 
+    ShowWaitDialog(237, 262); 
 }
 
 function DoNotShowWaitDDialogInner() {
@@ -218,13 +218,13 @@ function CheckFileExistInner(objImgURL) {
 
 function ShowImgSize(ImgSrc) {
     var img = new Image();
-    img.src = ImgSrc;
     img.onload = function () {
         varCurrentImageWidth = img.width;
         varCurrentImageHeight = img.height;
         ShowImgSizeInner();
         img = null;
     }
+    img.src = ImgSrc;
 }
 
 function FixSizeInner(objImgage) {
@@ -315,9 +315,9 @@ function SetSelectButtonImage(bSelectAll)
 {
     var imageSelect = document.getElementById("ImgSelectAll");
     if(bSelectAll == true)
-        imageSelect.src = "Images/SelectAll.png";
+        imageSelect.innerHTML = "Select All";
     else
-        imageSelect.src = "Images/UnSelectAll.png";
+        imageSelect.innerHTML = "UnSelect All";
 }
 
 function ClickCheckBox(obj) {
@@ -345,3 +345,10 @@ function ClickCheckBox(obj) {
         }
     }
 }
+function liclick(){
+         document.getElementById("local-image").getElementsByTagName("li").onclick = function (){
+	     alert(33);
+	     };	
+}
+	
+

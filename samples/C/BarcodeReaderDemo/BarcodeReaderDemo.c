@@ -38,9 +38,13 @@ __int64 GetFormat(const char * pstr)
 		llFormat |= EAN_13;
 	if (strstr(pszFormat, "ean_8") != NULL)
 		llFormat |= EAN_8;
+	if(strstr(pszFormat, "industrial_25") != NULL)
+		llFormat |= INDUSTRIAL_25;
 	if (strstr(pszFormat, "oned") != NULL)
 		llFormat = OneD;
-	
+	if(strstr(pszFormat, "qr_code") != NULL)
+		llFormat |= QR_CODE;
+
 	free(pszFormat);
 	return llFormat;
 }
@@ -65,6 +69,10 @@ const char * GetFormatStr(__int64 format)
 		return "EAN_13";
 	if (format == EAN_8)	
 		return "EAN_8";
+	if (format == INDUSTRIAL_25)	
+		return "INDUSTRIAL_25";
+	if (format == QR_CODE)
+		return "QR_CODE";
 	
 	return "UNKNOWN";
 }
@@ -72,7 +80,7 @@ const char * GetFormatStr(__int64 format)
 void PrintHelp()
 {
 	printf("\r\nUsage: BarcodeReaderDemo_C.exe [-f format] [-n number] ImageFilePath\r\n\r\n\
--f format: supported barcode formats include {CODE_39;CODE_128;CODE_93;CODABAR;ITF;UPC_A;UPC_E;EAN_13;EAN_8;OneD}.\r\n\r\n\
+-f format: supported barcode formats include {CODE_39;CODE_128;CODE_93;CODABAR;ITF;UPC_A;UPC_E;EAN_13;EAN_8;INDUSTRIAL_25;OneD;QR_CODE}.\r\n\r\n\
 -n number: maximum barcodes to read per page.\r\n\r\n\
 Press any key to continue . . .");
 	getch();
@@ -81,7 +89,7 @@ Press any key to continue . . .");
 int main(int argc, const char* argv[])
 {
 	// Parse command
-	__int64 llFormat = OneD;
+	__int64 llFormat = (OneD | QR_CODE);
 	const char * pszImageFile = NULL;
 	int iMaxCount = 0x7FFFFFFF;
 	int iIndex = 0;
@@ -146,6 +154,7 @@ int main(int argc, const char* argv[])
 		return 1;
 	}
 
+
 	// Set license
 	DBR_InitLicense("<Put your license key here>");
 
@@ -160,7 +169,7 @@ int main(int argc, const char* argv[])
 	pszTemp = (char*)malloc(4096);
 	if (iRet != DBR_OK)
 	{
-		sprintf(pszTemp, "Failed to read barcode: %s\r\n", GetErrorString(iRet));
+		sprintf(pszTemp, "Failed to read barcode: %s\r\n", DBR_GetErrorString(iRet));
 		printf(pszTemp);
 		free(pszTemp);
 		return 1;

@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BarcodeWeb</RootNamespace>
-    <AssemblyName>BarcodeWeb</AssemblyName>
+    <AssemblyName>BarcodeReaderDemo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -19,6 +19,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,33 +58,41 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BarcodeReaderDemo.aspx" />
+    <Content Include="Css\basis.css" />
+    <Content Include="Css\style.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Images\1to1.png" />
+    <Content Include="Images\download-image-hover.png" />
+    <Content Include="Images\download-image-link.png" />
+    <Content Include="Images\download-image-visite.png" />
+    <Content Include="Images\DRB-70x70.png" />
+    <Content Include="Images\FitWindow.png" />
+    <Content Include="Images\icn-live-chat.png" />
+    <Content Include="Images\icn-next.png" />
+    <Content Include="Images\icn-phone.png" />
+    <Content Include="Images\icn-pre.png" />
+    <Content Include="Images\icn-toTop-45X45.png" />
+    <Content Include="Images\icn-turn-into-16X16.png" />
+    <Content Include="Images\loading.gif" />
+    <Content Include="Images\local-browse-hover.png" />
+    <Content Include="Images\local-browse-link.png" />
+    <Content Include="Images\local-browse-visite.png" />
+    <Content Include="Images\local-open-hover.png" />
+    <Content Include="Images\local-open-link.png" />
+    <Content Include="Images\local-open-visite.png" />
+    <Content Include="Images\logo-dynamsoft-159X39.png" />
+    <Content Include="Images\recognize-hover.png" />
+    <Content Include="Images\recognize-link.png" />
+    <Content Include="Images\recognize-visite.png" />
+    <Content Include="overall-footer.aspx" />
+    <Content Include="overall-header.aspx" />
+    <Content Include="Scripts\ds-jquery.js" />
+    <Content Include="Scripts\jquery-1.11.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ajaxfunctions.aspx" />
-    <Content Include="Css\style.css" />
     <Content Include="Global.asax" />
-    <Content Include="Images\1to1.png" />
-    <Content Include="Images\adtopbackground.gif" />
-    <Content Include="Images\Barcode icon logo.png" />
-    <Content Include="Images\bg_menubar_black.png" />
-    <Content Include="Images\bottomleft.gif" />
-    <Content Include="Images\bottommid.gif" />
-    <Content Include="Images\bottomright.gif" />
-    <Content Include="Images\Browse.png" />
-    <Content Include="Images\btn-down-install-plugin.gif" />
-    <Content Include="Images\FitWidth.png" />
-    <Content Include="Images\FitWindow.png" />
-    <Content Include="Images\FullSize.png" />
-    <Content Include="Images\loading.gif" />
-    <Content Include="Images\logo.gif" />
-    <Content Include="Images\open image from URL.png" />
-    <Content Include="Images\OpenImage.png" />
-    <Content Include="Images\RecognizeBarcode.png" />
-    <Content Include="Images\run.png" />
-    <Content Include="Images\SelectAll.png" />
-	<Content Include="Images\UnSelectAll.png" />
     <Content Include="Scripts\DemoCommon.js" />
     <Content Include="Scripts\kissy-min.js" />
     <Content Include="Scripts\OnlineDemoAjax.js" />
@@ -119,6 +128,23 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\Upload\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="font-face\OpenSans-Light.eot" />
+    <None Include="font-face\OpenSans-Light.otf" />
+    <None Include="font-face\OpenSans-Light.svg" />
+    <None Include="font-face\OpenSans-Light.ttf" />
+    <None Include="font-face\OpenSans-Light.woff" />
+    <None Include="font-face\OpenSans-Regular.eot" />
+    <None Include="font-face\OpenSans-Regular.otf" />
+    <None Include="font-face\OpenSans-Regular.svg" />
+    <None Include="font-face\OpenSans-Regular.ttf" />
+    <None Include="font-face\OpenSans-Regular.woff" />
+    <None Include="font-face\OpenSans-Semibold.eot" />
+    <None Include="font-face\OpenSans-Semibold.otf" />
+    <None Include="font-face\OpenSans-Semibold.svg" />
+    <None Include="font-face\OpenSans-Semibold.ttf" />
+    <None Include="font-face\OpenSans-Semibold.woff" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
