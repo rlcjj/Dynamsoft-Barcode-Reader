@@ -1,23 +1,11 @@
 package com.dynamsoft.barcode;
 
-import java.util.Properties;
-
 public class JBarcode {
 
 	static {
 
 		try {
-			// get arch
-			Properties props = System.getProperties();
-			String bits = String.valueOf(props.get("sun.arch.data.model"));
-			if (bits.equals("32")) {
-				bits = "86";
-			}
-
-			String jniLib = "DynamsoftBarcodeJNIx" + bits;
-
-			// load dll
-			System.loadLibrary(jniLib);
+			System.loadLibrary("DynamsoftBarcodeJNIx86");
 		} catch (Exception e) {
 			System.err.println("load jni error!");
 		}
