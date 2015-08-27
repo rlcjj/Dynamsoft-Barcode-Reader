@@ -4,11 +4,13 @@
 // BarcodeReaderDemo.cpp : Defines the entry point for the console application.
 
 #include <windows.h>
-#include "../../../Include/If_DBR.h"
-#include "../../../Include/BarcodeFormat.h"
-#include "../../../Include/BarcodeStructs.h"
-#include "../../../Include/ErrorCode.h"
+#include "If_DBR.h"
+#include "BarcodeFormat.h"
+#include "BarcodeStructs.h"
+#include "ErrorCode.h"
 
+#include <stdio.h>
+#include <conio.h>
 
 #ifdef _WIN64
 #pragma comment(lib, "DBRx64.lib")
@@ -16,6 +18,11 @@
 #pragma comment(lib, "DBRx86.lib")
 #endif
 
+#ifndef DEBUG
+#define DEBUG(...) printf(__VA_ARGS__)
+#endif
+
+#define DEBUG(...)
 
 bool isGetClassBarcodeResult = false;
 jclass    br_m_cls   = NULL;
@@ -110,11 +117,10 @@ jobject convertResultToJNIObject(JNIEnv *env, pBarcodeResult pBarcode){
 void fillBarcodeResultArray(JNIEnv *env, jobject obj, pBarcodeResultArray pArrayResults){
 
 	loadJavaClassInfo(env);
-
 	int count = pArrayResults->iBarcodeCount;
 	pBarcodeResult* ppBarcodes = pArrayResults->ppBarcodes;
 
-
+	br_m_cls = env->FindClass("com/dynamsoft/barcode/tagBarcodeResult"); // Bug fixed: Do not globally save class reference. Always get class reference when calling native method.
 	jobjectArray swArray = env->NewObjectArray(count, br_m_cls, 0); 
 
 	for(int i=0; i<count; i++){
@@ -131,13 +137,9 @@ void SetOptions(pReaderOptions pOption, jint option_iMaxBarcodesNumPerPage, jlon
 	if(option_llBarcodeFormat > 0)
 		pOption->llBarcodeFormat = option_llBarcodeFormat;
 	else
-		pOption->llBarcodeFormat = OneD;
+		pOption->llBarcodeFormat = OneD | QR_CODE;
 
-	if(option_iMaxBarcodesNumPerPage > 0)
-		pOption->iMaxBarcodesNumPerPage = option_iMaxBarcodesNumPerPage;
-	else
-		pOption->iMaxBarcodesNumPerPage = MAXINT;
-
+	pOption->iMaxBarcodesNumPerPage = option_iMaxBarcodesNumPerPage;
 }
 
 
@@ -156,12 +158,19 @@ JNIEXPORT jint JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1InitLicense
 }
 
 JNIEXPORT jint JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1DecodeFile
-  (JNIEnv *env, jclass, jstring strFileName, jint option_iMaxBarcodesNumPerPage, jlong option_llBarcodeFormat, jobject pArrayResults)
+  (JNIEnv *env, jclass clazz, jstring strFileName, jint option_iMaxBarcodesNumPerPage, jlong option_llBarcodeFormat, jobject pArrayResults)
 {
+	// Native performance
+	unsigned __int64 ullTimeBegin = 0;
+	unsigned __int64 ullTimeEnd = 0;
+
 	const char *pFileName = env->GetStringUTFChars(strFileName, 0);
 	pBarcodeResultArray pResults = NULL;
 	ReaderOptions option;
 	SetOptions(&option, option_iMaxBarcodesNumPerPage, option_llBarcodeFormat);
+
+	// Native performance
+	ullTimeBegin = GetTickCount();
 
 	int ret = DBR_DecodeFile(
 		pFileName,
@@ -169,7 +178,12 @@ JNIEXPORT jint JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1DecodeFile
 		&pResults
 	);
 
+	// Native performance
+	ullTimeEnd = GetTickCount();
+
 	if(ret == DBR_OK){
+		// Native performance
+		DEBUG("Total barcode(s) found: %d. Total time spent: %.3f seconds\r\n\r\n", pResults->iBarcodeCount, ((float)(ullTimeEnd - ullTimeBegin) / 1000));
 		fillBarcodeResultArray(env, pArrayResults, pResults);
 		DBR_FreeBarcodeResults(&pResults);
 	}
@@ -260,15 +274,14 @@ JNIEXPORT jint JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1DecodeBufferRect
 	return ret;
 }
 
-JNIEXPORT jstring JNICALL Java_com_dynamsoft_barcode_JBarcode_GetErrorString
+JNIEXPORT jstring JNICALL Java_com_dynamsoft_barcode_JBarcode_DBR_1GetErrorString
   (JNIEnv *env, jclass, jint iErrorCode)
 {
-	const char *pError = GetErrorString( iErrorCode);
+	const char *pError = DBR_GetErrorString( iErrorCode);
     return env->NewStringUTF(pError);
     // (*env)->ReleaseStringUTFChars(env, jstr, utf); 
 
 }
-
 
 // for test
 /*
