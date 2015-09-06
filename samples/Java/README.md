@@ -32,8 +32,10 @@ How to Build and Run ZBar JNI Project
 
 Blog
 -----
-[How to Make Java Barcode Reader with Dynamsoft Barcode SDK][3]
+* [How to Make Java Barcode Reader with Dynamsoft Barcode SDK][3]
+* [How to Benchmark Barcode SDK Performance – ZXing vs ZBar][4]
 
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
 [3]:http://www.codepool.biz/barcode/how-to-make-java-barcode-reader-with-dynamsoft-barcode-sdk.html
+[4]:http://www.codepool.biz/barcode-sdk-performance-zxing-zbar.html
