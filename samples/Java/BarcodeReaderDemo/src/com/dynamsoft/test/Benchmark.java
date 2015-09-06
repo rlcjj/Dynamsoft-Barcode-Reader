@@ -23,6 +23,9 @@ public class Benchmark extends BaseReader {
 		if (path.isDirectory()) {
 			File[] list = path.listFiles();
 			for (File file : list) {
+				if (file.isDirectory())
+					continue;
+				
 				String fileName = file.getAbsolutePath();
 				if (fileName.endsWith(TEXT_SUFFIX))
 					continue;
