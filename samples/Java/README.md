@@ -21,6 +21,15 @@ How to Run
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/dbr_args.png)
 ![image](http://www.codepool.biz/wp-content/uploads/2015/05/dbr_results1.png)
 
+How to Build and Run ZBar JNI Project
+-----------------------------
+1. Download and install ImageMagick-6.9.2-0-Q16-x86-dll.exe: http://www.imagemagick.org/download/binaries/ImageMagick-6.9.2-0-Q16-x86-dll.exe
+2. Download and install ZBar 0.1: http://sourceforge.net/projects/zbar/files/zbar/0.10/
+3. Import the JNI project to Visual Studio and add relevant include directories and library directories.
+4. Build the project with win32.
+5. Copy the generated **zbarjni.dll** to Java project.
+6. Run **Benchmark.java** to read barcodes with ZBar.
+
 Blog
 -----
 [How to Make Java Barcode Reader with Dynamsoft Barcode SDK][3]
