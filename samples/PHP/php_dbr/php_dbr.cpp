@@ -1,3 +1,4 @@
+// php_dbr.cpp : Defines the exported functions for the DLL application.
 #include "php_dbr.h"
 
 #include "If_DBR.h"
@@ -10,20 +11,6 @@
 #else
 #pragma comment(lib, "DBRx86.lib")
 #endif
-
-void SetOptions(pReaderOptions pOption, int option_iMaxBarcodesNumPerPage, int option_llBarcodeFormat){
-
-	if (option_llBarcodeFormat > 0)
-		pOption->llBarcodeFormat = option_llBarcodeFormat;
-	else
-		pOption->llBarcodeFormat = OneD;
-
-	if (option_iMaxBarcodesNumPerPage > 0)
-		pOption->iMaxBarcodesNumPerPage = option_iMaxBarcodesNumPerPage;
-	else
-		pOption->iMaxBarcodesNumPerPage = INT_MAX;
-
-}
 
 ZEND_FUNCTION(DecodeBarcodeFile);
 
@@ -52,36 +39,37 @@ ZEND_FUNCTION(DecodeBarcodeFile){
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &pFileName, &iLen) == FAILURE) {
         RETURN_STRING("Invalid parameters", true);
     }
-	
-	// Dynamsoft Barcode Reader: init
-	int option_iMaxBarcodesNumPerPage = -1;
-	int option_llBarcodeFormat = -1;
-	pBarcodeResultArray pResults = NULL;
-	ReaderOptions option;
 
-	SetOptions(&option, option_iMaxBarcodesNumPerPage, option_llBarcodeFormat);
+	// Dynamsoft Barcode Reader: init
+	__int64 llFormat = (OneD | QR_CODE | PDF417 | DATAMATRIX);
+	int iMaxCount = 0x7FFFFFFF;
+	int iIndex = 0;
+	ReaderOptions ro = {0};
+	pBarcodeResultArray pResults = NULL;
+	int iRet = -1;
+	char * pszTemp = NULL;
+
+	DBR_InitLicense("license");
+	ro.llBarcodeFormat = llFormat;
+	ro.iMaxBarcodesNumPerPage = iMaxCount;
 
 	// decode barcode image file
-	int ret = DBR_DecodeFile(
-		pFileName,
-		&option,
-		&pResults
-		);
-
+	int ret = DBR_DecodeFile(pFileName, &ro, &pResults);
+	printf("ret = %d", ret);
 	if (ret == DBR_OK)
 	{
 		int count = pResults->iBarcodeCount;
 		pBarcodeResult* ppBarcodes = pResults->ppBarcodes;
 		pBarcodeResult tmp = NULL;
-
+		printf("count = %d", count);
 		// loop all results
 		for (int i = 0; i < count; i++)
 		{
 			tmp = ppBarcodes[i];
 
 			// convert format type to string
-			char format[64]; 
-			sprintf (format, "%d", tmp->llFormat); 
+			char format[64];
+			sprintf (format, "%d", tmp->llFormat);
 
 			// (barcode type, result)
 			add_assoc_string(return_value, format, tmp->pBarcodeData, 1);
